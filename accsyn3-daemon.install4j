@@ -1,0 +1,1448 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<install4j version="10.0.7" transformSequenceNumber="10">
+  <directoryPresets config="./build/log/accsyn-daemon-crash.txt" />
+  <application name="accsyn Daemon" applicationId="8676-3927-8865-0640" mediaDir="./build/${compiler:accsyn_version}" shortName="accsyn" publisher="HDR AB" publisherWeb="https://accsyn.com" version="${compiler:accsyn_version}" allPathsRelative="true" autoSave="true" macVolumeId="ffab8b2ca215ea92" javaMinVersion="1.7" javaMaxVersion="30">
+    <variables>
+      <variable name="accsyn_executable" value="accsynApp" />
+      <variable name="accsyn_version" value="3.0-0_4" />
+      <variable name="sys.ext.updatesFileName" value="updates_daemon.xml" />
+    </variables>
+    <codeSigning macEnabled="true" macPkcs12File="/Users/henriknorin/Documents/accsyn/dev/encrypted/cert/apple/apple.p12" windowsEnabled="true" windowsPkcs12File="/Users/henriknorin/Documents/accsyn/dev/encrypted/cert/codesign/codesign.p12" macNotarize="true" appleId="henrik.norin@highdefinitionrender.com" />
+    <jreBundles jdkProviderId="AdoptOpenJDK" release="18/jdk-18+36" />
+  </application>
+  <files>
+    <mountPoints>
+      <mountPoint id="122" location="lib" />
+      <mountPoint id="123" location="lib/noarch" />
+      <mountPoint id="380" location="log" />
+    </mountPoints>
+    <entries>
+      <dirEntry mountPoint="123" file="./lib/noarch" overwriteMode="1" overrideOverwriteMode="true" subDirectory="noarch">
+        <exclude>
+          <entry location=".DS_Store" />
+        </exclude>
+      </dirEntry>
+      <fileEntry mountPoint="380" file="./build/log/accsyn-daemon-crash.txt" />
+    </entries>
+  </files>
+  <launchers>
+    <launcher name="accsynDaemon" id="56" icnsFile="../resources/graphics/accsyn_daemon_icon.icns">
+      <executable name="accsyndaemon" iconFile="./resources/graphics/accsyn_daemon_icon.ico" stderrFile="log${installer:sys.fileSeparator}accsyn-daemon-crash.log" stderrMode="append" stdoutFile="log${installer:sys.fileSeparator}accsyn-deadmon-output.log" stdoutMode="append" executableMode="service" changeWorkingDirectory="false" singleInstance="true" />
+      <splashScreen bitmapFile="./resources/graphics/accsyn-splashscreen.png" />
+      <java mainClass="com.accsyn.ASCMD" arguments="daemon">
+        <classPath>
+          <scanDirectory location="lib/noarch" failOnError="false" />
+        </classPath>
+      </java>
+      <serviceFile>[Service]
+StandardOutput=null</serviceFile>
+      <iconImageFiles>
+        <file path="./resources/graphics/accsyn_daemon_icon_32.png" />
+        <file path="./resources/graphics/accsyn_daemon_icon_48.png" />
+        <file path="./resources/graphics/accsyn_daemon_icon_64.png" />
+      </iconImageFiles>
+    </launcher>
+    <launcher name="accsyn App CLI" id="160" excludeFromMenu="true">
+      <executable name="accsyn" iconSet="true" redirectStderr="false" stderrFile="log${installer:sys.fileSeparator}accsyn-cli-crash.log" stderrMode="append" executableMode="console" changeWorkingDirectory="false" />
+      <splashScreen bitmapFile="./resources/graphics/accsyn-splashscreen.png" />
+      <java mainClass="com.accsyn.ASCMD" vmParameters="-Xmx3096m">
+        <classPath>
+          <scanDirectory location="lib/noarch" failOnError="false" />
+        </classPath>
+      </java>
+      <iconImageFiles>
+        <file path="./resources/graphics/accsyn_console_icon_32.png" />
+        <file path="./resources/graphics/accsyn_console_icon_48.png" />
+        <file path="./resources/graphics/accsyn_console_icon_64.png" />
+        <file path="./resources/graphics/accsyn_console_icon_128.png" />
+        <file path="./resources/graphics/accsyn_console_icon_512.png" />
+      </iconImageFiles>
+    </launcher>
+    <launcher name="accsyn App" id="372">
+      <executable name="${compiler:accsyn_executable}" iconSet="true" stderrFile="log${installer:sys.fileSeparator}accsyn-gui-crash.log.txt" executableMode="gui" changeWorkingDirectory="false" />
+      <splashScreen show="true" bitmapFile="./resources/graphics/accsyn-splashscreen.png" />
+      <java mainClass="com.accsyn.ASCMD" vmParameters="-Xmx512m" arguments="--gui">
+        <classPath>
+          <scanDirectory location="lib/noarch" failOnError="false" />
+        </classPath>
+      </java>
+      <vmOptionsFile mode="none" />
+      <iconImageFiles>
+        <file path="./resources/graphics/accsyn_icon_32.png" />
+        <file path="./resources/graphics/accsyn_icon_48.png" />
+        <file path="./resources/graphics/accsyn_icon_64.png" />
+        <file path="./resources/graphics/accsyn_icon_128.png" />
+        <file path="./resources/graphics/accsyn_icon_512.png" />
+      </iconImageFiles>
+      <macStaticAssociations>
+        <urlHandler scheme="accsyn" />
+      </macStaticAssociations>
+    </launcher>
+    <launcher name="accsyn App DEBUG" id="525" excludeFromMenu="true">
+      <executable name="${compiler:accsyn_executable}-debug" iconSet="true" redirectStderr="false" executableMode="console" changeWorkingDirectory="false" />
+      <splashScreen show="true" bitmapFile="./resources/graphics/accsyn-splashscreen.png" />
+      <java mainClass="com.accsyn.ASCMD" vmParameters="-Xmx512m" arguments="--debug --gui">
+        <classPath>
+          <scanDirectory location="lib/noarch" failOnError="false" />
+        </classPath>
+      </java>
+      <vmOptionsFile mode="none" />
+      <iconImageFiles>
+        <file path="./resources/graphics/accsyn_debug_icon_32.png" />
+        <file path="./resources/graphics/accsyn_debug_icon_48.png" />
+        <file path="./resources/graphics/accsyn_debug_icon_64.png" />
+        <file path="./resources/graphics/accsyn_debug_icon_128.png" />
+        <file path="./resources/graphics/accsyn_debug_icon_512.png" />
+      </iconImageFiles>
+    </launcher>
+    <launcher name="accsyn App CONSOLED" id="1717" excludeFromMenu="true">
+      <executable name="${compiler:accsyn_executable}-console" iconSet="true" redirectStderr="false" executableMode="console" changeWorkingDirectory="false" />
+      <splashScreen show="true" bitmapFile="./resources/graphics/accsyn-splashscreen.png" />
+      <java mainClass="com.accsyn.ASCMD" vmParameters="-Xmx512m" arguments="--gui">
+        <classPath>
+          <scanDirectory location="lib/noarch" failOnError="false" />
+        </classPath>
+      </java>
+      <vmOptionsFile mode="none" />
+      <iconImageFiles>
+        <file path="./resources/graphics/accsyn_debug_icon_32.png" />
+        <file path="./resources/graphics/accsyn_debug_icon_48.png" />
+        <file path="./resources/graphics/accsyn_debug_icon_64.png" />
+        <file path="./resources/graphics/accsyn_debug_icon_128.png" />
+        <file path="./resources/graphics/accsyn_debug_icon_512.png" />
+      </iconImageFiles>
+    </launcher>
+  </launchers>
+  <installerGui autoUpdateDescriptorUrl="https://accsyn.com/app/v1/updates_daemon.xml">
+    <customCode>
+      <directory location="./build/bin" />
+      <archive location="./lib/noarch/json_simple-1.1.jar" />
+      <archive location="./lib/noarch/httpclient-4.3.5.jar" />
+      <archive location="./lib/noarch/httpcore-4.3.2.jar" />
+      <archive location="./lib/noarch/commons-logging-1.1.3.jar" />
+      <archive location="./lib/noarch/commons-codec-1.6.jar" />
+    </customCode>
+    <applications>
+      <application id="installer" beanClass="com.install4j.runtime.beans.applications.InstallerApplication" actionElevationType="elevated" styleId="743" launchInNewProcess="false">
+        <serializedBean>
+          <property name="customIconImageFiles">
+            <add>
+              <object class="com.install4j.api.beans.ExternalFile">
+                <string>./resources/graphics/accsyn_daemon_install_icon_32.png</string>
+              </object>
+            </add>
+            <add>
+              <object class="com.install4j.api.beans.ExternalFile">
+                <string>./resources/graphics/accsyn_daemon_install_icon_48.png</string>
+              </object>
+            </add>
+            <add>
+              <object class="com.install4j.api.beans.ExternalFile">
+                <string>./resources/graphics/accsyn_daemon_install_icon_64.png</string>
+              </object>
+            </add>
+            <add>
+              <object class="com.install4j.api.beans.ExternalFile">
+                <string>./resources/graphics/accsyn_daemon_install_icon_128.png</string>
+              </object>
+            </add>
+            <add>
+              <object class="com.install4j.api.beans.ExternalFile">
+                <string>./resources/graphics/accsyn_daemon_install_icon_512.png</string>
+              </object>
+            </add>
+          </property>
+          <property name="frameWidth" type="int" value="600" />
+          <property name="useCustomIcon" type="boolean" value="true" />
+        </serializedBean>
+        <styleOverrides>
+          <styleOverride name="Custom watermark" enabled="true">
+            <formComponent name="Watermark" id="747" beanClass="com.install4j.runtime.beans.formcomponents.SeparatorComponent">
+              <serializedBean>
+                <property name="labelText" type="string">accsyn</property>
+              </serializedBean>
+            </formComponent>
+          </styleOverride>
+        </styleOverrides>
+        <variables>
+          <variable name="accsyn_api_user" value="&quot;&quot;" valueClass="string" />
+          <variable name="accsyn_daemon_do_install" value="true" valueClass="boolean" />
+          <variable name="accsynIntermediateConfPath" valueClass="string" />
+          <variable name="accsyn_api_key" value="&quot;&quot;" valueClass="string" hidden="true" />
+          <variable name="accsyn_site" value="&quot;&quot;" valueClass="string" />
+          <variable name="accsyn_pin" valueClass="string" hidden="true" />
+          <variable name="accsyn_factory_reset" value="false" valueClass="boolean" />
+          <variable name="accsyn_write_credentials" value="true" valueClass="boolean" />
+          <variable name="accsyn_daemon_user" valueClass="string" />
+          <variable name="accsyn_daemon_password" valueClass="string" hidden="true" />
+          <variable name="accsyn_daemon_umask" valueClass="string" />
+          <variable name="accsyn_conf_dir" valueClass="string" />
+          <variable name="accsyn_log_dir" valueClass="string" />
+          <variable name="accsyn_workspace" valueClass="string" />
+          <variable name="accsyn_data_dir" valueClass="string" />
+          <variable name="accsyn_temp_dir" valueClass="string" />
+        </variables>
+        <startup>
+          <screen id="1" beanClass="com.install4j.runtime.beans.screens.StartupScreen" rollbackBarrierExitCode="0">
+            <actions>
+              <action id="13" beanClass="com.install4j.runtime.beans.actions.misc.RequestPrivilegesAction" actionElevationType="none">
+                <serializedBean>
+                  <property name="failIfNotRootUnix" type="boolean" value="true" />
+                  <property name="linuxPrivilegeRequirement" type="enum" class="com.install4j.runtime.beans.actions.misc.PrivilegeRequirement" value="ROOT" />
+                  <property name="obtainIfAdminMac" type="boolean" value="true" />
+                  <property name="obtainIfNormalMac" type="boolean" value="true" />
+                  <property name="obtainIfNormalWin" type="boolean" value="true" />
+                </serializedBean>
+              </action>
+            </actions>
+          </screen>
+        </startup>
+        <screens>
+          <screen id="2" beanClass="com.install4j.runtime.beans.screens.WelcomeScreen" styleId="749">
+            <actions>
+              <action id="3" beanClass="com.install4j.runtime.beans.actions.misc.LoadResponseFileAction" multiExec="true">
+                <serializedBean>
+                  <property name="excludedVariables" type="array" elementType="string" length="1">
+                    <element index="0">sys.installationDir</element>
+                  </property>
+                </serializedBean>
+                <condition>context.getBooleanVariable("sys.confirmedUpdateInstallation")</condition>
+              </action>
+              <action name="Evaluate intermediate path" id="310" beanClass="com.install4j.runtime.beans.actions.control.SetVariableAction" enabled="false">
+                <serializedBean>
+                  <property name="script">
+                    <object class="com.install4j.api.beans.ScriptProperty">
+                      <property name="value" type="string">String s = System.getProperty("os.name");
+if (s == null) {
+	System.err.println("[Startup] ERROR! Could not determine operating system name!");
+    return null;
+} if (s.indexOf("Windows") &gt; -1) {
+	return System.getenv("ProgramData");
+} else if (s.indexOf("Mac OS X") &gt; -1) {
+	return "/var/tmp";
+} else {
+	return "/var/tmp";
+}
+</property>
+                    </object>
+                  </property>
+                  <property name="variableName" type="string">accsynIntermediateConfPath</property>
+                </serializedBean>
+              </action>
+              <action name="Load ACCSYN_API_USER from ENV" id="518" beanClass="com.install4j.runtime.beans.actions.control.SetVariableAction" failureStrategy="askQuit">
+                <serializedBean>
+                  <property name="script">
+                    <object class="com.install4j.api.beans.ScriptProperty">
+                      <property name="value" type="string">return System.getenv("ACCSYN_API_USER")!=null?System.getenv("ACCSYN_API_USER"):"";</property>
+                    </object>
+                  </property>
+                  <property name="variableName" type="string">accsyn_api_user</property>
+                </serializedBean>
+              </action>
+              <action name="Load ACCSYN_API_KEY from ENV" id="519" beanClass="com.install4j.runtime.beans.actions.control.SetVariableAction" failureStrategy="askQuit">
+                <serializedBean>
+                  <property name="script">
+                    <object class="com.install4j.api.beans.ScriptProperty">
+                      <property name="value" type="string">return System.getenv("ACCSYN_API_KEY")!=null?System.getenv("ACCSYN_API_KEY"):"";</property>
+                    </object>
+                  </property>
+                  <property name="variableName" type="string">accsyn_api_key</property>
+                </serializedBean>
+              </action>
+              <action name="Load ACCSYN_WORKSPACE from ENV" id="520" beanClass="com.install4j.runtime.beans.actions.control.SetVariableAction" failureStrategy="askQuit">
+                <serializedBean>
+                  <property name="script">
+                    <object class="com.install4j.api.beans.ScriptProperty">
+                      <property name="value" type="string">return System.getenv("ACCSYN_WORKSPACE")!=null?System.getenv("ACCSYN_WORKSPACE"):(System.getenv("ACCSYN_DOMAIN")!=null?System.getenv("ACCSYN_DOMAIN"):"");</property>
+                    </object>
+                  </property>
+                  <property name="variableName" type="string">accsyn_workspace</property>
+                </serializedBean>
+              </action>
+              <action name="Load ACCSYN_SITE from ENV" id="535" beanClass="com.install4j.runtime.beans.actions.control.SetVariableAction" failureStrategy="askQuit">
+                <serializedBean>
+                  <property name="script">
+                    <object class="com.install4j.api.beans.ScriptProperty">
+                      <property name="value" type="string">return System.getenv("ACCSYN_SITE")!=null?System.getenv("ACCSYN_SITE"):"";</property>
+                    </object>
+                  </property>
+                  <property name="variableName" type="string">accsyn_site</property>
+                </serializedBean>
+              </action>
+              <action id="1446" beanClass="com.accsyn.installer.ASIReadDaemonStatusAction" actionElevationType="elevated" rollbackBarrierExitCode="0" />
+            </actions>
+            <formComponents>
+              <formComponent id="628" beanClass="com.install4j.runtime.beans.formcomponents.MultilineLabelComponent">
+                <serializedBean>
+                  <property name="labelText" type="string">${form:welcomeMessage}</property>
+                </serializedBean>
+                <visibilityScript>!context.isConsole()</visibilityScript>
+              </formComponent>
+              <formComponent id="629" beanClass="com.install4j.runtime.beans.formcomponents.ConsoleHandlerFormComponent">
+                <serializedBean>
+                  <property name="consoleScript">
+                    <object class="com.install4j.api.beans.ScriptProperty">
+                      <property name="value" type="string">String message = context.getMessage("ConsoleWelcomeLabel", context.getApplicationName());
+return console.askOkCancel(message, true);
+</property>
+                    </object>
+                  </property>
+                </serializedBean>
+              </formComponent>
+              <formComponent id="630" beanClass="com.install4j.runtime.beans.formcomponents.UpdateAlertComponent" useExternalParametrization="true" externalParametrizationName="Update Alert" externalParametrizationMode="include">
+                <externalParametrizationPropertyNames>
+                  <propertyName>updateCheck</propertyName>
+                </externalParametrizationPropertyNames>
+              </formComponent>
+              <formComponent id="631" beanClass="com.install4j.runtime.beans.formcomponents.MultilineLabelComponent" insetTop="20">
+                <serializedBean>
+                  <property name="labelText" type="string">${i18n:ClickNext}</property>
+                </serializedBean>
+              </formComponent>
+              <formComponent id="74" beanClass="com.install4j.runtime.beans.formcomponents.MultilineLabelComponent" enabled="false">
+                <serializedBean>
+                  <property name="labelFont">
+                    <object class="java.awt.Font">
+                      <string>SansSerif</string>
+                      <int>0</int>
+                      <int>9</int>
+                    </object>
+                  </property>
+                  <property name="labelFontType" type="enum" class="com.install4j.runtime.beans.formcomponents.FontType" value="CUSTOM" />
+                  <property name="labelText" type="string">Notes:
+----------------
+ - If you run into any bugs, please have mercy and report them to support@accsyn.com. Also please attach the log files in a .ZIP (Windows: C:\ProgramData\Accsyn\Accsyn\log, Mac/Linux: /var/log/accsyn/)
+ - The Accsyn daemon need to be able to talk to https://accsyn.com(tcp:443) and also, unless having a dedicated proxy server out there, accept incoming traffic that needs to be port forwarded in your firewall to this machine. Default ports for incoming traffic are tcp:45190-45210 and the server setup wizard assist you in setting up this port forward.
+ - For admin manual and more information, please visit http://support.accsyn.com.
+ 
+ /The Accsyn team</property>
+                </serializedBean>
+              </formComponent>
+            </formComponents>
+          </screen>
+          <screen name="Configure" id="388" beanClass="com.install4j.runtime.beans.screens.FormScreen" enabled="false">
+            <serializedBean>
+              <property name="subTitle" type="string">Configure the Accsyn background service/daemon</property>
+              <property name="title" type="string">Setup service</property>
+            </serializedBean>
+            <condition>!context.isUpdateInstallation()</condition>
+            <formComponents>
+              <formComponent name="Username" id="455" beanClass="com.install4j.runtime.beans.formcomponents.TextfieldComponent">
+                <serializedBean>
+                  <property name="checkIfEmpty" type="boolean" value="true" />
+                  <property name="initialText" type="string">${installer:accsynUsername}</property>
+                  <property name="labelText" type="string">Enter server login(E-mail):</property>
+                  <property name="variableName" type="string">accsynUsername</property>
+                </serializedBean>
+              </formComponent>
+              <formComponent name="API_KEY" id="456" beanClass="com.install4j.runtime.beans.formcomponents.PasswordComponent">
+                <serializedBean>
+                  <property name="checkIfEmpty" type="boolean" value="true" />
+                  <property name="initialText" type="string">${installer:accsynAPIKey}</property>
+                  <property name="labelText" type="string">Enter API key/secret:</property>
+                  <property name="variableName" type="string">accsynAPIKey</property>
+                </serializedBean>
+              </formComponent>
+              <formComponent name="Org" id="457" beanClass="com.install4j.runtime.beans.formcomponents.TextfieldComponent">
+                <serializedBean>
+                  <property name="checkIfEmpty" type="boolean" value="true" />
+                  <property name="initialText" type="string">${installer:accsynOrganization}</property>
+                  <property name="labelText" type="string">Enter your Accsyn organization:</property>
+                  <property name="variableName" type="string">accsynOrganization</property>
+                </serializedBean>
+              </formComponent>
+              <formComponent name="Site" id="536" beanClass="com.install4j.runtime.beans.formcomponents.TextfieldComponent">
+                <serializedBean>
+                  <property name="initialText" type="string">${installer:accsynOrganization}${installer:accsynSite}</property>
+                  <property name="labelText" type="string">(Optional) Enter Accsyn site:</property>
+                  <property name="variableName" type="string">accsynSite</property>
+                </serializedBean>
+              </formComponent>
+              <formComponent name="Do install service" id="392" beanClass="com.install4j.runtime.beans.formcomponents.CheckboxComponent">
+                <serializedBean>
+                  <property name="checkboxText" type="string">Install service</property>
+                  <property name="initiallySelected" type="boolean" value="true" />
+                  <property name="variableName" type="string">accsyn_daemon_do_install</property>
+                </serializedBean>
+              </formComponent>
+              <formComponent name="Run service as user" id="396" beanClass="com.install4j.runtime.beans.formcomponents.CheckboxComponent">
+                <serializedBean>
+                  <property name="checkboxText" type="string">Run service as user</property>
+                  <property name="variableName" type="string">accsynServiceAsUser</property>
+                </serializedBean>
+              </formComponent>
+              <formComponent name="Debug" id="521" beanClass="com.install4j.runtime.beans.formcomponents.LabelComponent" enabled="false">
+                <serializedBean>
+                  <property name="labelText" type="string">accsynUsername=${installer:accsynUsername}</property>
+                </serializedBean>
+              </formComponent>
+            </formComponents>
+          </screen>
+          <screen name="Input daemon user" id="306" beanClass="com.install4j.runtime.beans.screens.FormScreen" enabled="false">
+            <serializedBean>
+              <property name="subTitle" type="string">Username and password to run service as</property>
+              <property name="title" type="string">Accsyn service login</property>
+            </serializedBean>
+            <condition>context.getBooleanVariable("accsynServiceAsUser") == true</condition>
+            <formComponents>
+              <formComponent id="368" beanClass="com.install4j.runtime.beans.formcomponents.TextfieldComponent">
+                <serializedBean>
+                  <property name="checkIfEmpty" type="boolean" value="true" />
+                  <property name="enterGoesToNextScreen" type="boolean" value="true" />
+                  <property name="helpText" type="string">Enter the username that service should run as.</property>
+                  <property name="initialText" type="string">user@domain.com</property>
+                  <property name="inputVerifier">
+                    <object class="com.install4j.api.beans.ScriptProperty">
+                      <property name="value" type="string" />
+                    </object>
+                  </property>
+                  <property name="labelText" type="string">Username:${installer:accsynServiceUser}</property>
+                  <property name="requestFocus" type="boolean" value="true" />
+                  <property name="variableName" type="string">accsynUsername</property>
+                </serializedBean>
+                <visibilityScript>context.getBooleanVariable("accsynServiceAsUser") == true</visibilityScript>
+              </formComponent>
+              <formComponent id="369" beanClass="com.install4j.runtime.beans.formcomponents.PasswordComponent">
+                <serializedBean>
+                  <property name="checkIfEmpty" type="boolean" value="true" />
+                  <property name="enterGoesToNextScreen" type="boolean" value="true" />
+                  <property name="helpText" type="string">Enter the password for user.</property>
+                  <property name="labelText" type="string">Password:</property>
+                  <property name="variableName" type="string">accsynServicePWD</property>
+                </serializedBean>
+                <visibilityScript>context.getBooleanVariable("accsynServiceAsUser") == true</visibilityScript>
+              </formComponent>
+            </formComponents>
+          </screen>
+          <screen id="1056" beanClass="com.accsyn.installer.ASIAuthScreen" actionElevationType="elevated" rollbackBarrierExitCode="0">
+            <condition>!context.isUpdateInstallation()&amp;&amp;(context.getVariable("accsyn_api_key")==null||((String)context.getVariable("accsyn_api_key")).length()==0)</condition>
+          </screen>
+          <screen id="1447" beanClass="com.accsyn.installer.ASIDaemonUserScreen" actionElevationType="elevated" rollbackBarrierExitCode="0">
+            <condition>!context.isUpdateInstallation()&amp;&amp;context.getBooleanVariable("accsyn_daemon_do_install")</condition>
+          </screen>
+          <screen id="4" beanClass="com.install4j.runtime.beans.screens.InstallationDirectoryScreen">
+            <condition>!context.getBooleanVariable("sys.confirmedUpdateInstallation")</condition>
+            <actions>
+              <action id="5" beanClass="com.install4j.runtime.beans.actions.misc.LoadResponseFileAction" multiExec="true">
+                <serializedBean>
+                  <property name="excludedVariables" type="array" elementType="string" length="1">
+                    <element index="0">sys.installationDir</element>
+                  </property>
+                </serializedBean>
+                <condition>context.getVariable("sys.responseFile") == null</condition>
+              </action>
+            </actions>
+            <formComponents>
+              <group id="1718" beanClass="com.install4j.runtime.beans.groups.HorizontalFormComponentGroup">
+                <beans>
+                  <formComponent id="1061" beanClass="com.install4j.runtime.beans.formcomponents.LabelComponent">
+                    <serializedBean>
+                      <property name="labelFont">
+                        <object class="java.awt.Font">
+                          <string>Arial</string>
+                          <int>0</int>
+                          <int>10</int>
+                        </object>
+                      </property>
+                      <property name="labelFontType" type="enum" class="com.install4j.runtime.beans.formcomponents.FontType" value="CUSTOM" />
+                      <property name="labelText" type="string">Workspace:</property>
+                    </serializedBean>
+                  </formComponent>
+                  <formComponent name="Domain" id="1063" beanClass="com.install4j.runtime.beans.formcomponents.LabelComponent" insetLeft="25">
+                    <serializedBean>
+                      <property name="labelFont">
+                        <object class="java.awt.Font">
+                          <string>Courier New</string>
+                          <int>1</int>
+                          <int>12</int>
+                        </object>
+                      </property>
+                      <property name="labelFontType" type="enum" class="com.install4j.runtime.beans.formcomponents.FontType" value="CUSTOM" />
+                      <property name="labelText" type="string">${installer:accsyn_workspace}</property>
+                    </serializedBean>
+                  </formComponent>
+                </beans>
+              </group>
+              <group id="1719" beanClass="com.install4j.runtime.beans.groups.HorizontalFormComponentGroup">
+                <beans>
+                  <formComponent id="1062" beanClass="com.install4j.runtime.beans.formcomponents.LabelComponent">
+                    <serializedBean>
+                      <property name="labelFont">
+                        <object class="java.awt.Font">
+                          <string>Arial</string>
+                          <int>0</int>
+                          <int>10</int>
+                        </object>
+                      </property>
+                      <property name="labelFontType" type="enum" class="com.install4j.runtime.beans.formcomponents.FontType" value="CUSTOM" />
+                      <property name="labelText" type="string">Username(email):</property>
+                    </serializedBean>
+                  </formComponent>
+                  <formComponent name="Username" id="1064" beanClass="com.install4j.runtime.beans.formcomponents.LabelComponent">
+                    <serializedBean>
+                      <property name="labelFont">
+                        <object class="java.awt.Font">
+                          <string>Courier New</string>
+                          <int>1</int>
+                          <int>12</int>
+                        </object>
+                      </property>
+                      <property name="labelFontType" type="enum" class="com.install4j.runtime.beans.formcomponents.FontType" value="CUSTOM" />
+                      <property name="labelText" type="string">${installer:accsyn_api_user}</property>
+                    </serializedBean>
+                  </formComponent>
+                </beans>
+              </group>
+              <formComponent id="1066" beanClass="com.install4j.runtime.beans.formcomponents.SpacerComponent" />
+              <formComponent id="1065" beanClass="com.install4j.runtime.beans.formcomponents.SeparatorComponent" />
+              <formComponent id="646" beanClass="com.install4j.runtime.beans.formcomponents.MultilineLabelComponent" insetBottom="25">
+                <serializedBean>
+                  <property name="labelText" type="string">${i18n:SelectDirLabel(${compiler:sys.fullName})}</property>
+                </serializedBean>
+              </formComponent>
+              <formComponent id="647" beanClass="com.install4j.runtime.beans.formcomponents.InstallationDirectoryChooserComponent" useExternalParametrization="true" externalParametrizationName="Installation Directory Chooser" externalParametrizationMode="include">
+                <serializedBean>
+                  <property name="requestFocus" type="boolean" value="true" />
+                </serializedBean>
+                <externalParametrizationPropertyNames>
+                  <propertyName>suggestAppDir</propertyName>
+                  <propertyName>validateApplicationId</propertyName>
+                  <propertyName>existingDirWarning</propertyName>
+                  <propertyName>checkWritable</propertyName>
+                  <propertyName>manualEntryAllowed</propertyName>
+                  <propertyName>checkFreeSpace</propertyName>
+                  <propertyName>showRequiredDiskSpace</propertyName>
+                  <propertyName>showFreeDiskSpace</propertyName>
+                  <propertyName>allowSpacesOnUnix</propertyName>
+                  <propertyName>validationScript</propertyName>
+                  <propertyName>standardValidation</propertyName>
+                </externalParametrizationPropertyNames>
+              </formComponent>
+            </formComponents>
+          </screen>
+          <screen id="6" beanClass="com.install4j.runtime.beans.screens.ComponentsScreen">
+            <formComponents>
+              <formComponent id="650" beanClass="com.install4j.runtime.beans.formcomponents.MultilineLabelComponent">
+                <serializedBean>
+                  <property name="labelText" type="string">${i18n:SelectComponentsLabel2}</property>
+                </serializedBean>
+                <visibilityScript>!context.isConsole()</visibilityScript>
+              </formComponent>
+              <formComponent id="651" beanClass="com.install4j.runtime.beans.formcomponents.ComponentSelectorComponent" useExternalParametrization="true" externalParametrizationName="Installation Components" externalParametrizationMode="include">
+                <serializedBean>
+                  <property name="fillVertical" type="boolean" value="true" />
+                </serializedBean>
+                <externalParametrizationPropertyNames>
+                  <propertyName>selectionChangedScript</propertyName>
+                </externalParametrizationPropertyNames>
+              </formComponent>
+            </formComponents>
+          </screen>
+          <screen id="7" beanClass="com.install4j.runtime.beans.screens.StandardProgramGroupScreen">
+            <serializedBean>
+              <property name="programGroupName" type="string">${compiler:sys.fullName}</property>
+            </serializedBean>
+            <condition>!context.getBooleanVariable("sys.confirmedUpdateInstallation")</condition>
+          </screen>
+          <screen id="8" beanClass="com.install4j.runtime.beans.screens.InstallationScreen" rollbackBarrier="true">
+            <actions>
+              <action id="1724" beanClass="com.install4j.runtime.beans.actions.control.SetMessageAction" actionElevationType="none" rollbackBarrierExitCode="0">
+                <serializedBean>
+                  <property name="detailMessage" type="string">Stopping accsyn service</property>
+                  <property name="useDetail" type="boolean" value="true" />
+                </serializedBean>
+              </action>
+              <action id="877" beanClass="com.install4j.runtime.beans.actions.services.StopServiceAction" actionElevationType="elevated" rollbackBarrierExitCode="0">
+                <serializedBean>
+                  <property name="launcherId" type="string">56</property>
+                </serializedBean>
+              </action>
+              <action id="9" beanClass="com.install4j.runtime.beans.actions.InstallFilesAction" actionElevationType="elevated" failureStrategy="quit" errorMessage="${i18n:FileCorrupted}" />
+              <action id="1732" beanClass="com.install4j.runtime.beans.actions.control.SetMessageAction" actionElevationType="none" rollbackBarrierExitCode="0">
+                <serializedBean>
+                  <property name="detailMessage" type="string">Installing accsyn daemon</property>
+                  <property name="statusMessage" type="string">Creating shortcuts</property>
+                  <property name="useStatus" type="boolean" value="true" />
+                </serializedBean>
+              </action>
+              <action id="10" beanClass="com.install4j.runtime.beans.actions.desktop.CreateProgramGroupAction" actionElevationType="elevated">
+                <serializedBean>
+                  <property name="addUninstaller" type="boolean" value="true" />
+                  <property name="uninstallerMenuName" type="string">${i18n:UninstallerMenuEntry(${compiler:sys.fullName})}</property>
+                </serializedBean>
+                <condition>!context.getBooleanVariable("sys.programGroupDisabled")</condition>
+              </action>
+              <action id="11" beanClass="com.install4j.runtime.beans.actions.desktop.RegisterAddRemoveAction" actionElevationType="elevated">
+                <serializedBean>
+                  <property name="itemName" type="string">${compiler:sys.fullName} ${compiler:sys.version}</property>
+                </serializedBean>
+              </action>
+              <action id="1725" beanClass="com.install4j.runtime.beans.actions.control.SetMessageAction" actionElevationType="none" rollbackBarrierExitCode="0">
+                <serializedBean>
+                  <property name="detailMessage" type="string">Installing accsyn daemon</property>
+                  <property name="statusMessage" type="string">Installing accsyn daemon</property>
+                  <property name="useStatus" type="boolean" value="true" />
+                </serializedBean>
+              </action>
+              <action name="Install as Service" id="383" beanClass="com.install4j.runtime.beans.actions.services.InstallServiceAction" actionElevationType="elevated" failureStrategy="askQuit">
+                <serializedBean>
+                  <property name="accountNameOrSid" type="string">${installer:accsynServiceUser}</property>
+                  <property name="description" type="string">Runs the accsyn background Daemon for sharing files and running the API.</property>
+                  <property name="keepCurrentAccount" type="boolean" value="true" />
+                  <property name="launcherId" type="string">56</property>
+                  <property name="macosIdentifier" type="string">com.accsyn.daemon</property>
+                  <property name="password" type="string">${installer:accsynServicePWD}</property>
+                </serializedBean>
+                <condition>context.getBooleanVariable("accsyn_daemon_do_install") == true</condition>
+              </action>
+              <action id="1726" beanClass="com.install4j.runtime.beans.actions.control.SetMessageAction" actionElevationType="none" rollbackBarrierExitCode="0">
+                <serializedBean>
+                  <property name="statusMessage" type="string">Configuring daemon user and umask</property>
+                  <property name="useStatus" type="boolean" value="true" />
+                </serializedBean>
+              </action>
+              <action id="1448" beanClass="com.accsyn.installer.ASIUpdateDaemonAction" actionElevationType="elevated" rollbackBarrierExitCode="0">
+                <condition>context.getBooleanVariable("accsyn_daemon_do_install") == true &amp;&amp; !context.isUpdateInstallation()</condition>
+              </action>
+              <action id="1727" beanClass="com.install4j.runtime.beans.actions.control.SetMessageAction" actionElevationType="none" rollbackBarrierExitCode="0">
+                <serializedBean>
+                  <property name="statusMessage" type="string">Installing daemon watchdog</property>
+                  <property name="useStatus" type="boolean" value="true" />
+                </serializedBean>
+              </action>
+              <action name="Install daemon watchdog" id="1268" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" actionElevationType="elevated" rollbackBarrierExitCode="0" failureStrategy="askRetryQuit">
+                <serializedBean>
+                  <property name="arguments" type="array" elementType="string" length="2">
+                    <element index="0">daemon</element>
+                    <element index="1">watchdog_install</element>
+                  </property>
+                  <property name="executable">
+                    <object class="java.io.File">
+                      <string>accsyn</string>
+                    </object>
+                  </property>
+                  <property name="wait" type="boolean" value="true" />
+                  <property name="workingDirectory">
+                    <object class="java.io.File">
+                      <string>${installer:sys.installationDir}</string>
+                    </object>
+                  </property>
+                </serializedBean>
+                <condition>context.getBooleanVariable("accsyn_daemon_do_install") == true </condition>
+              </action>
+              <action id="1728" beanClass="com.install4j.runtime.beans.actions.control.SetMessageAction" actionElevationType="none" rollbackBarrierExitCode="0">
+                <serializedBean>
+                  <property name="statusMessage" type="string">Configuring firewall</property>
+                  <property name="useStatus" type="boolean" value="true" />
+                </serializedBean>
+              </action>
+              <action id="319" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" actionElevationType="elevated">
+                <serializedBean>
+                  <property name="arguments" type="array" elementType="string" length="18">
+                    <element index="0">advfirewall</element>
+                    <element index="1">firewall</element>
+                    <element index="2">add</element>
+                    <element index="3">rule</element>
+                    <element index="4">name=${compiler:accsyn_executable} TCP IN</element>
+                    <element index="5">dir=in</element>
+                    <element index="6">action=allow</element>
+                    <element index="7">service=</element>
+                    <element index="8">localip=any</element>
+                    <element index="9">remoteip=any</element>
+                    <element index="10">localport=any</element>
+                    <element index="11">remoteport=any</element>
+                    <element index="12">protocol=tcp</element>
+                    <element index="13">interfacetype=any</element>
+                    <element index="14">security=notrequired</element>
+                    <element index="15">edge=no</element>
+                    <element index="16">profile=any</element>
+                    <element index="17">enable=yes</element>
+                  </property>
+                  <property name="executable">
+                    <object class="java.io.File">
+                      <string>${installer:sys.system32Dir}/netsh.exe</string>
+                    </object>
+                  </property>
+                  <property name="showWindowsConsole" type="boolean" value="true" />
+                  <property name="workingDirectory">
+                    <object class="java.io.File">
+                      <string>${installer:sys.system32Dir}</string>
+                    </object>
+                  </property>
+                </serializedBean>
+                <condition>return -1&lt;System.getProperty("os.name").indexOf("Windows");</condition>
+              </action>
+              <action id="1729" beanClass="com.install4j.runtime.beans.actions.control.SetMessageAction" actionElevationType="none" rollbackBarrierExitCode="0">
+                <serializedBean>
+                  <property name="statusMessage" type="string">Writing credentials to temp file</property>
+                  <property name="useStatus" type="boolean" value="true" />
+                </serializedBean>
+              </action>
+              <action id="1722" beanClass="com.accsyn.installer.ASIWriteCredentialsAction" rollbackBarrierExitCode="0" failureStrategy="askRetryQuit">
+                <condition>!context.isUpdateInstallation()&amp;&amp;context.getBooleanVariable("accsyn_write_credentials")&amp;&amp;context.getVariable("accsyn_client_id")!=null&amp;&amp;0&lt;((String)context.getVariable("accsyn_client_id")).length()</condition>
+              </action>
+              <action id="1730" beanClass="com.install4j.runtime.beans.actions.control.SetMessageAction" actionElevationType="none" rollbackBarrierExitCode="0">
+                <serializedBean>
+                  <property name="statusMessage" type="string">Factory reset configuration</property>
+                  <property name="useStatus" type="boolean" value="true" />
+                </serializedBean>
+              </action>
+              <action id="1445" beanClass="com.accsyn.installer.ASIFactoryResetAction" actionElevationType="elevated" rollbackBarrierExitCode="0">
+                <condition>!context.isUpdateInstallation()&amp;&amp;context.getBooleanVariable("accsyn_factory_reset")</condition>
+              </action>
+              <action id="1731" beanClass="com.install4j.runtime.beans.actions.control.SetMessageAction" actionElevationType="none" rollbackBarrierExitCode="0">
+                <serializedBean>
+                  <property name="statusMessage" type="string">Aligning permissions on directories</property>
+                  <property name="useStatus" type="boolean" value="true" />
+                </serializedBean>
+              </action>
+              <action id="1604" beanClass="com.install4j.runtime.beans.actions.files.SetOwnerAction" actionElevationType="elevated" rollbackBarrierExitCode="0">
+                <serializedBean>
+                  <property name="files" type="array" class="java.io.File" length="4">
+                    <element index="0">
+                      <object class="java.io.File">
+                        <string>${installer:accsyn_conf_dir}</string>
+                      </object>
+                    </element>
+                    <element index="1">
+                      <object class="java.io.File">
+                        <string>${installer:accsyn_log_dir}</string>
+                      </object>
+                    </element>
+                    <element index="2">
+                      <object class="java.io.File">
+                        <string>${installer:accsyn_data_dir}</string>
+                      </object>
+                    </element>
+                    <element index="3">
+                      <object class="java.io.File">
+                        <string>${installer:accsyn_temp_dir}</string>
+                      </object>
+                    </element>
+                  </property>
+                  <property name="owner" type="string">${installer:accsyn_daemon_user}</property>
+                  <property name="recursive" type="boolean" value="true" />
+                </serializedBean>
+                <condition>System.getProperty("os.name").toLowerCase().indexOf("windows")==-1&amp;&amp;!context.isUpdateInstallation()&amp;&amp;context.getBooleanVariable("accsyn_daemon_do_install")&amp;&amp;(String)context.getVariable("accsyn_daemon_user")!=null&amp;&amp;0&lt;((String)context.getVariable("accsyn_daemon_user")).length()</condition>
+              </action>
+              <action id="1712" beanClass="com.install4j.runtime.beans.actions.files.AddWindowsFileRightsAction" actionElevationType="elevated" rollbackBarrierExitCode="0">
+                <serializedBean>
+                  <property name="execute" type="boolean" value="true" />
+                  <property name="files" type="array" class="java.io.File" length="4">
+                    <element index="0">
+                      <object class="java.io.File">
+                        <string>${installer:accsyn_conf_dir}</string>
+                      </object>
+                    </element>
+                    <element index="1">
+                      <object class="java.io.File">
+                        <string>${installer:accsyn_log_dir}</string>
+                      </object>
+                    </element>
+                    <element index="2">
+                      <object class="java.io.File">
+                        <string>${installer:accsyn_data_dir}</string>
+                      </object>
+                    </element>
+                    <element index="3">
+                      <object class="java.io.File">
+                        <string>${installer:accsyn_temp_dir}</string>
+                      </object>
+                    </element>
+                  </property>
+                  <property name="group" type="enum" class="com.install4j.runtime.beans.actions.files.WindowsGroup" value="SID_OR_ACCOUNT_NAME" />
+                  <property name="sidOrAccountName" type="string">${installer:accsyn_daemon_user}</property>
+                  <property name="write" type="boolean" value="true" />
+                </serializedBean>
+                <condition>-1&lt;System.getProperty("os.name").toLowerCase().indexOf("windows")&amp;&amp;!context.isUpdateInstallation()&amp;&amp;context.getBooleanVariable("accsyn_daemon_do_install")&amp;&amp;(String)context.getVariable("accsyn_daemon_user")!=null&amp;&amp;0&lt;((String)context.getVariable("accsyn_daemon_user")).length()</condition>
+              </action>
+            </actions>
+            <formComponents>
+              <formComponent id="667" beanClass="com.install4j.runtime.beans.formcomponents.ProgressComponent">
+                <serializedBean>
+                  <property name="initialStatusMessage" type="string">${i18n:WizardPreparing}</property>
+                </serializedBean>
+              </formComponent>
+            </formComponents>
+          </screen>
+          <screen id="12" beanClass="com.install4j.runtime.beans.screens.FinishedScreen" styleId="749" finishScreen="true">
+            <actions>
+              <action id="370" beanClass="com.install4j.runtime.beans.actions.services.StartServiceAction" actionElevationType="elevated">
+                <serializedBean>
+                  <property name="launcherId" type="string">56</property>
+                </serializedBean>
+                <condition>context.getBooleanVariable("executeLauncherAction") &amp;&amp; (!context.isUnattended())</condition>
+              </action>
+            </actions>
+            <formComponents>
+              <formComponent id="673" beanClass="com.install4j.runtime.beans.formcomponents.MultilineLabelComponent" insetBottom="10">
+                <serializedBean>
+                  <property name="labelText" type="string">${form:finishedMessage}</property>
+                </serializedBean>
+              </formComponent>
+              <formComponent name="Execute launcher" id="76" beanClass="com.install4j.runtime.beans.formcomponents.CheckboxComponent">
+                <serializedBean>
+                  <property name="checkboxText" type="string">Start accsyn service</property>
+                  <property name="initiallySelected" type="boolean" value="true" />
+                  <property name="variableName" type="string">executeLauncherAction</property>
+                </serializedBean>
+              </formComponent>
+              <formComponent id="1060" beanClass="com.install4j.runtime.beans.formcomponents.SpacerComponent" />
+              <formComponent id="885" beanClass="com.install4j.runtime.beans.formcomponents.SeparatorComponent" />
+              <formComponent id="1059" beanClass="com.install4j.runtime.beans.formcomponents.SpacerComponent" />
+              <formComponent id="883" beanClass="com.install4j.runtime.beans.formcomponents.MultilineLabelComponent">
+                <serializedBean>
+                  <property name="labelText" type="string">GUI: ${installer:sys.installationDir}/accsynApp  
+CLI: ${installer:sys.installationDir}/accsyn</property>
+                </serializedBean>
+              </formComponent>
+              <formComponent id="974" beanClass="com.install4j.runtime.beans.formcomponents.HyperlinkLabelComponent">
+                <serializedBean>
+                  <property name="hyperlinkText" type="string">https://${installer:accsyn_workspace}.accsyn.com</property>
+                  <property name="labelText" type="string">Admin:</property>
+                  <property name="url" type="string">https://${installer:accsyn_workspace}.accsyn.com</property>
+                </serializedBean>
+                <visibilityScript>!context.isUpdateInstallation()&amp;&amp;context.getVariable("accsyn_client_id")!=null</visibilityScript>
+              </formComponent>
+              <formComponent id="69" beanClass="com.install4j.runtime.beans.formcomponents.HyperlinkLabelComponent">
+                <serializedBean>
+                  <property name="hyperlinkText" type="string">https://accsyn.io</property>
+                  <property name="labelText" type="string">Website:</property>
+                  <property name="url" type="string">https://accsyn.io</property>
+                </serializedBean>
+              </formComponent>
+            </formComponents>
+          </screen>
+        </screens>
+      </application>
+      <application id="uninstaller" beanClass="com.install4j.runtime.beans.applications.UninstallerApplication" launchInNewProcess="false">
+        <serializedBean>
+          <property name="customMacosExecutableName" type="string">${i18n:UninstallerMenuEntry(${compiler:sys.fullName})}</property>
+          <property name="executableName" type="string">uninstall-daemon</property>
+          <property name="useCustomMacosExecutableName" type="boolean" value="true" />
+        </serializedBean>
+        <startup>
+          <screen id="14" beanClass="com.install4j.runtime.beans.screens.StartupScreen" rollbackBarrierExitCode="0">
+            <actions>
+              <action id="20" beanClass="com.install4j.runtime.beans.actions.misc.LoadResponseFileAction" />
+              <action id="21" beanClass="com.install4j.runtime.beans.actions.misc.RequireInstallerPrivilegesAction" actionElevationType="none" />
+              <action id="697" beanClass="com.install4j.runtime.beans.actions.misc.RequestPrivilegesAction" actionElevationType="none">
+                <serializedBean>
+                  <property name="failIfNotRootUnix" type="boolean" value="true" />
+                  <property name="linuxPrivilegeRequirement" type="enum" class="com.install4j.runtime.beans.actions.misc.PrivilegeRequirement" value="ROOT" />
+                  <property name="obtainIfAdminMac" type="boolean" value="true" />
+                  <property name="obtainIfNormalMac" type="boolean" value="true" />
+                  <property name="obtainIfNormalWin" type="boolean" value="true" />
+                </serializedBean>
+              </action>
+            </actions>
+          </screen>
+        </startup>
+        <screens>
+          <screen id="15" beanClass="com.install4j.runtime.beans.screens.UninstallWelcomeScreen" styleId="749">
+            <formComponents>
+              <formComponent id="699" beanClass="com.install4j.runtime.beans.formcomponents.MultilineLabelComponent" insetBottom="10">
+                <serializedBean>
+                  <property name="labelText" type="string">${form:welcomeMessage}</property>
+                </serializedBean>
+                <visibilityScript>!context.isConsole()</visibilityScript>
+              </formComponent>
+              <formComponent id="700" beanClass="com.install4j.runtime.beans.formcomponents.ConsoleHandlerFormComponent">
+                <serializedBean>
+                  <property name="consoleScript">
+                    <object class="com.install4j.api.beans.ScriptProperty">
+                      <property name="value" type="string">String message = context.getMessage("ConfirmUninstall", context.getApplicationName());
+return console.askYesNo(message, true);
+</property>
+                    </object>
+                  </property>
+                </serializedBean>
+              </formComponent>
+            </formComponents>
+          </screen>
+          <screen id="16" beanClass="com.install4j.runtime.beans.screens.UninstallationScreen">
+            <actions>
+              <action id="17" beanClass="com.install4j.runtime.beans.actions.UninstallFilesAction" actionElevationType="elevated" />
+              <action id="696" beanClass="com.install4j.runtime.beans.actions.services.StopServiceAction" actionElevationType="elevated">
+                <serializedBean>
+                  <property name="launcherId" type="string">56</property>
+                </serializedBean>
+              </action>
+              <action name="Uninstall daemon watchdog" id="1269" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" actionElevationType="elevated" rollbackBarrierExitCode="0">
+                <serializedBean>
+                  <property name="arguments" type="array" elementType="string" length="2">
+                    <element index="0">daemon</element>
+                    <element index="1">watchdog_uninstall</element>
+                  </property>
+                  <property name="executable">
+                    <object class="java.io.File">
+                      <string>accsyn</string>
+                    </object>
+                  </property>
+                  <property name="workingDirectory">
+                    <object class="java.io.File">
+                      <string>${installer:sys.installationDir}</string>
+                    </object>
+                  </property>
+                </serializedBean>
+              </action>
+            </actions>
+            <formComponents>
+              <formComponent id="705" beanClass="com.install4j.runtime.beans.formcomponents.ProgressComponent">
+                <serializedBean>
+                  <property name="initialStatusMessage" type="string">${i18n:UninstallerPreparing}</property>
+                </serializedBean>
+              </formComponent>
+            </formComponents>
+          </screen>
+          <screen id="19" beanClass="com.install4j.runtime.beans.screens.UninstallFailureScreen" finishScreen="true" />
+          <screen id="18" beanClass="com.install4j.runtime.beans.screens.UninstallSuccessScreen" styleId="749" finishScreen="true">
+            <formComponents>
+              <formComponent id="708" beanClass="com.install4j.runtime.beans.formcomponents.MultilineLabelComponent" insetBottom="10">
+                <serializedBean>
+                  <property name="labelText" type="string">${form:successMessage}</property>
+                </serializedBean>
+              </formComponent>
+            </formComponents>
+          </screen>
+        </screens>
+      </application>
+      <application name="Background update downloader" id="1365" beanClass="com.install4j.runtime.beans.applications.CustomApplication">
+        <serializedBean>
+          <property name="customIconImageFiles">
+            <add>
+              <object class="com.install4j.api.beans.ExternalFile">
+                <string>${compiler:sys.install4jHome}/resource/updater_16.png</string>
+              </object>
+            </add>
+            <add>
+              <object class="com.install4j.api.beans.ExternalFile">
+                <string>${compiler:sys.install4jHome}/resource/updater_32.png</string>
+              </object>
+            </add>
+            <add>
+              <object class="com.install4j.api.beans.ExternalFile">
+                <string>${compiler:sys.install4jHome}/resource/updater_48.png</string>
+              </object>
+            </add>
+            <add>
+              <object class="com.install4j.api.beans.ExternalFile">
+                <string>${compiler:sys.install4jHome}/resource/updater_128.png</string>
+              </object>
+            </add>
+            <add>
+              <object class="com.install4j.api.beans.ExternalFile">
+                <string>${compiler:sys.install4jHome}/resource/updater_256.png</string>
+              </object>
+            </add>
+          </property>
+          <property name="executableName" type="string">bgupdater</property>
+          <property name="useCustomIcon" type="boolean" value="true" />
+          <property name="vmParameters" type="string">-Dapple.awt.UIElement=true</property>
+          <property name="windowTitle" type="string">${compiler:sys.fullName}</property>
+        </serializedBean>
+        <variables>
+          <variable name="customUpdatesUrl" value="${compiler:sys.updatesUrl}" valueClass="string" />
+        </variables>
+        <startup>
+          <screen id="1366" beanClass="com.install4j.runtime.beans.screens.StartupScreen" rollbackBarrierExitCode="0">
+            <actions>
+              <action name="Check prerequsites" id="1367" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" rollbackBarrierExitCode="0" failureStrategy="quit">
+                <serializedBean>
+                  <property name="script">
+                    <object class="com.install4j.api.beans.ScriptProperty">
+                      <property name="value" type="string">import java.nio.file.*;
+
+Path dir = context.getInstallationDirectory().toPath();
+// quit if the current installation is on a read only file system, for example a disk image on macOS
+// or if the directory is not writeable on Linux/Unix. 
+// If there is no  "Request privileges" action in the installer, the condition should be
+// simply Files.isWritable(dir); 
+return !Files.getFileStore(dir).isReadOnly() &amp;&amp; (Util.isWindows() || Util.isMacOS() || Files.isWritable(dir));
+</property>
+                    </object>
+                  </property>
+                </serializedBean>
+              </action>
+              <action id="1368" beanClass="com.install4j.runtime.beans.actions.update.CheckForUpdateAction" actionElevationType="none" failureStrategy="quit">
+                <serializedBean>
+                  <property name="url" type="string">${installer:customUpdatesUrl}</property>
+                  <property name="variable" type="string">updateDescriptor</property>
+                </serializedBean>
+              </action>
+              <action name="Update descriptor entry" id="1369" beanClass="com.install4j.runtime.beans.actions.control.SetVariableAction" failureStrategy="quit">
+                <serializedBean>
+                  <property name="failIfNull" type="boolean" value="true" />
+                  <property name="script">
+                    <object class="com.install4j.api.beans.ScriptProperty">
+                      <property name="value" type="string">UpdateDescriptorEntry entry = ((UpdateDescriptor)context.getVariable("updateDescriptor")).getPossibleUpdateEntry();
+
+if (entry == null) {
+    return null;
+} else if (entry.isArchive() &amp;&amp; !entry.isSingleBundle()) {
+    // only installers and single bundle archives on macOS are supported
+    return null;
+} else if (entry.isDownloaded()) {
+    // update has been downloaded already
+    return null;
+} else {
+    return entry;
+}</property>
+                    </object>
+                  </property>
+                  <property name="variableName" type="string">updateDescriptorEntry</property>
+                </serializedBean>
+              </action>
+              <group name="Update available" id="1370" beanClass="com.install4j.runtime.beans.groups.ActionGroup">
+                <serializedBean>
+                  <property name="conditionExpression">
+                    <object class="com.install4j.api.beans.ScriptProperty">
+                      <property name="value" type="string">context.getVariable("updateDescriptorEntry") != null</property>
+                    </object>
+                  </property>
+                </serializedBean>
+                <beans>
+                  <action name="New version" id="1371" beanClass="com.install4j.runtime.beans.actions.control.SetVariableAction">
+                    <serializedBean>
+                      <property name="script">
+                        <object class="com.install4j.api.beans.ScriptProperty">
+                          <property name="value" type="string">((UpdateDescriptorEntry)context.getVariable("updateDescriptorEntry")).getNewVersion()</property>
+                        </object>
+                      </property>
+                      <property name="variableName" type="string">updaterNewVersion</property>
+                    </serializedBean>
+                  </action>
+                  <action name="Download URL" id="1372" beanClass="com.install4j.runtime.beans.actions.control.SetVariableAction">
+                    <serializedBean>
+                      <property name="script">
+                        <object class="com.install4j.api.beans.ScriptProperty">
+                          <property name="value" type="string">((UpdateDescriptorEntry)context.getVariable("updateDescriptorEntry")).getURL().toExternalForm()</property>
+                        </object>
+                      </property>
+                      <property name="variableName" type="string">updaterDownloadUrl</property>
+                    </serializedBean>
+                  </action>
+                  <action name="Download location" id="1373" beanClass="com.install4j.runtime.beans.actions.control.SetVariableAction">
+                    <serializedBean>
+                      <property name="script">
+                        <object class="com.install4j.api.beans.ScriptProperty">
+                          <property name="value" type="string">context.getVariable("sys.updateStorageDir") + File.separator + ((UpdateDescriptorEntry)context.getVariable("updateDescriptorEntry")).getFileName()</property>
+                        </object>
+                      </property>
+                      <property name="variableName" type="string">updaterDownloadFile</property>
+                    </serializedBean>
+                  </action>
+                  <action id="1374" beanClass="com.install4j.runtime.beans.actions.net.DownloadFileAction" failureStrategy="quit">
+                    <serializedBean>
+                      <property name="targetFile">
+                        <object class="java.io.File">
+                          <string>${installer:updaterDownloadFile}</string>
+                        </object>
+                      </property>
+                      <property name="url" type="string">${installer:updaterDownloadUrl}</property>
+                    </serializedBean>
+                  </action>
+                  <group name="Installer" id="1375" beanClass="com.install4j.runtime.beans.groups.ActionGroup">
+                    <serializedBean>
+                      <property name="conditionExpression">
+                        <object class="com.install4j.api.beans.ScriptProperty">
+                          <property name="value" type="string">!((UpdateDescriptorEntry)context.getVariable("updateDescriptorEntry")).isArchive()</property>
+                        </object>
+                      </property>
+                    </serializedBean>
+                    <beans>
+                      <action id="1376" beanClass="com.install4j.runtime.beans.actions.files.SetModeAction" actionElevationType="elevated">
+                        <serializedBean>
+                          <property name="files" type="array" class="java.io.File" length="1">
+                            <element index="0">
+                              <object class="java.io.File">
+                                <string>${installer:updaterDownloadFile}</string>
+                              </object>
+                            </element>
+                          </property>
+                          <property name="mode" type="string">755</property>
+                        </serializedBean>
+                      </action>
+                      <action id="1377" beanClass="com.install4j.runtime.beans.actions.update.ScheduleUpdateAction" actionElevationType="none" failureStrategy="quit">
+                        <serializedBean>
+                          <property name="installerFile">
+                            <object class="java.io.File">
+                              <string>${installer:updaterDownloadFile}</string>
+                            </object>
+                          </property>
+                          <property name="version" type="string">${installer:updaterNewVersion}</property>
+                        </serializedBean>
+                      </action>
+                    </beans>
+                  </group>
+                  <group name="Single Bundle Archive" id="1378" beanClass="com.install4j.runtime.beans.groups.ActionGroup">
+                    <serializedBean>
+                      <property name="conditionExpression">
+                        <object class="com.install4j.api.beans.ScriptProperty">
+                          <property name="value" type="string">((UpdateDescriptorEntry)context.getVariable("updateDescriptorEntry")).isArchive()</property>
+                        </object>
+                      </property>
+                    </serializedBean>
+                    <beans>
+                      <action name="Staging Directory" id="1379" beanClass="com.install4j.runtime.beans.actions.control.SetVariableAction">
+                        <serializedBean>
+                          <property name="script">
+                            <object class="com.install4j.api.beans.ScriptProperty">
+                              <property name="value" type="string">String dirName = context.getVariable("updaterDownloadFile") + "_dir";
+new File(dirName).mkdirs();
+return dirName;</property>
+                            </object>
+                          </property>
+                          <property name="variableName" type="string">updaterStagingDir</property>
+                        </serializedBean>
+                      </action>
+                      <action name="Delete Staging Directory" id="1380" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" actionElevationType="elevated" rollbackBarrierExitCode="0">
+                        <serializedBean>
+                          <property name="backupForRollback" type="boolean" value="false" />
+                          <property name="files" type="array" class="java.io.File" length="1">
+                            <element index="0">
+                              <object class="java.io.File">
+                                <string>${installer:updaterStagingDir}</string>
+                              </object>
+                            </element>
+                          </property>
+                          <property name="recursive" type="boolean" value="true" />
+                        </serializedBean>
+                        <condition>new File((String)context.getVariable("updaterStagingDir")).exists()</condition>
+                      </action>
+                      <action id="1381" beanClass="com.install4j.runtime.beans.actions.files.ExtractDmgFileAction" actionElevationType="elevated" rollbackBarrierExitCode="0" failureStrategy="quit">
+                        <serializedBean>
+                          <property name="archiveFile">
+                            <object class="java.io.File">
+                              <string>${installer:updaterDownloadFile}</string>
+                            </object>
+                          </property>
+                          <property name="destinationDirectory">
+                            <object class="java.io.File">
+                              <string>${installer:updaterStagingDir}</string>
+                            </object>
+                          </property>
+                          <property name="fileFilter">
+                            <object class="com.install4j.api.beans.ScriptProperty">
+                              <property name="value" type="string">// only extract app bundle, no other top level files
+
+import com.install4j.api.unix.UnixFileSystem;
+
+File realFile = new File(dmgMountPoint, file.getPath());
+
+return file.getParent() != null || (file.getName().endsWith(".app") &amp;&amp; realFile.isDirectory() &amp;&amp; !UnixFileSystem.getFileInformation(realFile).isLink());</property>
+                            </object>
+                          </property>
+                        </serializedBean>
+                        <condition>((String)context.getVariable("updaterDownloadFile")).endsWith(".dmg")</condition>
+                      </action>
+                      <action id="1382" beanClass="com.install4j.runtime.beans.actions.files.ExtractTarFileAction" actionElevationType="elevated" rollbackBarrierExitCode="0" failureStrategy="quit">
+                        <serializedBean>
+                          <property name="archiveFile">
+                            <object class="java.io.File">
+                              <string>${installer:updaterDownloadFile}</string>
+                            </object>
+                          </property>
+                          <property name="destinationDirectory">
+                            <object class="java.io.File">
+                              <string>${installer:updaterStagingDir}</string>
+                            </object>
+                          </property>
+                          <property name="fileFilter">
+                            <object class="com.install4j.api.beans.ScriptProperty">
+                              <property name="value" type="string">// only extract app bundle, no other top level files
+file.getParent() != null || (file.getName().endsWith(".app") &amp;&amp; directory)</property>
+                            </object>
+                          </property>
+                        </serializedBean>
+                        <condition>!((String)context.getVariable("updaterDownloadFile")).endsWith(".dmg")</condition>
+                      </action>
+                      <action id="1383" beanClass="com.install4j.runtime.beans.actions.update.ScheduleUpdateAction" actionElevationType="none" failureStrategy="quit">
+                        <serializedBean>
+                          <property name="installerFile">
+                            <object class="java.io.File">
+                              <string>${installer:updaterStagingDir}</string>
+                            </object>
+                          </property>
+                          <property name="version" type="string">${installer:updaterNewVersion}</property>
+                        </serializedBean>
+                      </action>
+                      <action name="Delete archive" id="1384" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" actionElevationType="elevated" rollbackBarrierExitCode="0">
+                        <serializedBean>
+                          <property name="backupForRollback" type="boolean" value="false" />
+                          <property name="files" type="array" class="java.io.File" length="1">
+                            <element index="0">
+                              <object class="java.io.File">
+                                <string>${installer:updaterDownloadFile}</string>
+                              </object>
+                            </element>
+                          </property>
+                        </serializedBean>
+                      </action>
+                    </beans>
+                  </group>
+                </beans>
+              </group>
+            </actions>
+          </screen>
+        </startup>
+      </application>
+    </applications>
+    <styles defaultStyleId="743">
+      <style name="Standard" id="743" beanClass="com.install4j.runtime.beans.styles.FormStyle">
+        <formComponents>
+          <formComponent name="Header" id="744" beanClass="com.install4j.runtime.beans.styles.NestedStyleComponent" insetTop="0" insetBottom="0">
+            <serializedBean>
+              <property name="styleId" type="string">756</property>
+            </serializedBean>
+          </formComponent>
+          <group name="Main" id="745" beanClass="com.install4j.runtime.beans.groups.VerticalFormComponentGroup">
+            <beans>
+              <formComponent id="746" beanClass="com.install4j.runtime.beans.styles.ContentComponent" insetTop="10" insetLeft="20" insetBottom="10" insetRight="20" />
+              <formComponent name="Watermark" id="747" beanClass="com.install4j.runtime.beans.formcomponents.SeparatorComponent" insetTop="0" insetLeft="5" insetBottom="0" useExternalParametrization="true" externalParametrizationName="Custom watermark" externalParametrizationMode="include">
+                <serializedBean>
+                  <property name="enabledTitleText" type="boolean" value="false" />
+                  <property name="labelText" type="string">install4j</property>
+                </serializedBean>
+                <externalParametrizationPropertyNames>
+                  <propertyName>labelText</propertyName>
+                </externalParametrizationPropertyNames>
+              </formComponent>
+              <formComponent name="Footer" id="748" beanClass="com.install4j.runtime.beans.styles.NestedStyleComponent" insetTop="0" insetBottom="0">
+                <serializedBean>
+                  <property name="styleId" type="string">760</property>
+                </serializedBean>
+              </formComponent>
+            </beans>
+          </group>
+        </formComponents>
+      </style>
+      <style name="Banner" id="749" beanClass="com.install4j.runtime.beans.styles.FormStyle">
+        <formComponents>
+          <group id="750" beanClass="com.install4j.runtime.beans.groups.VerticalFormComponentGroup" useExternalParametrization="true" externalParametrizationName="Customize banner image" externalParametrizationMode="include">
+            <serializedBean>
+              <property name="backgroundColor">
+                <object class="com.install4j.runtime.beans.LightOrDarkColor">
+                  <object class="java.awt.Color">
+                    <int>255</int>
+                    <int>255</int>
+                    <int>255</int>
+                    <int>255</int>
+                  </object>
+                  <object class="java.awt.Color">
+                    <int>49</int>
+                    <int>52</int>
+                    <int>53</int>
+                    <int>255</int>
+                  </object>
+                </object>
+              </property>
+              <property name="borderSides">
+                <object class="com.install4j.runtime.beans.formcomponents.BorderSides">
+                  <property name="bottom" type="boolean" value="true" />
+                </object>
+              </property>
+              <property name="imageEdgeBackgroundColor">
+                <object class="com.install4j.runtime.beans.LightOrDarkColor">
+                  <object class="java.awt.Color">
+                    <int>25</int>
+                    <int>143</int>
+                    <int>220</int>
+                    <int>255</int>
+                  </object>
+                  <object class="java.awt.Color">
+                    <int>0</int>
+                    <int>74</int>
+                    <int>151</int>
+                    <int>255</int>
+                  </object>
+                </object>
+              </property>
+              <property name="imageEdgeBorder" type="boolean" value="true" />
+              <property name="imageFile">
+                <object class="com.install4j.api.beans.ExternalFile">
+                  <string>${compiler:sys.install4jHome}/resource/styles/wizard.png</string>
+                </object>
+              </property>
+              <property name="insets">
+                <object class="java.awt.Insets">
+                  <int>5</int>
+                  <int>10</int>
+                  <int>10</int>
+                  <int>10</int>
+                </object>
+              </property>
+            </serializedBean>
+            <beans>
+              <formComponent id="751" beanClass="com.install4j.runtime.beans.styles.ScreenTitleComponent" insetTop="0">
+                <serializedBean>
+                  <property name="labelFontSizePercent" type="int" value="130" />
+                  <property name="labelFontStyle" type="enum" class="com.install4j.runtime.beans.formcomponents.FontStyle" value="BOLD" />
+                  <property name="labelFontType" type="enum" class="com.install4j.runtime.beans.formcomponents.FontType" value="DERIVED" />
+                </serializedBean>
+              </formComponent>
+              <formComponent id="752" beanClass="com.install4j.runtime.beans.formcomponents.SeparatorComponent" />
+              <formComponent id="753" beanClass="com.install4j.runtime.beans.styles.ContentComponent" insetTop="10" insetBottom="0" />
+            </beans>
+            <externalParametrizationPropertyNames>
+              <propertyName>imageAnchor</propertyName>
+              <propertyName>imageEdgeBackgroundColor</propertyName>
+              <propertyName>imageFile</propertyName>
+            </externalParametrizationPropertyNames>
+          </group>
+          <formComponent id="754" beanClass="com.install4j.runtime.beans.styles.NestedStyleComponent" insetBottom="0">
+            <serializedBean>
+              <property name="styleId" type="string">760</property>
+            </serializedBean>
+          </formComponent>
+        </formComponents>
+      </style>
+      <group name="Style components" id="755" beanClass="com.install4j.runtime.beans.groups.StyleGroup">
+        <beans>
+          <style name="Standard header" id="756" beanClass="com.install4j.runtime.beans.styles.FormStyle">
+            <serializedBean>
+              <property name="fillVertical" type="boolean" value="false" />
+              <property name="standalone" type="boolean" value="false" />
+              <property name="verticalAnchor" type="enum" class="com.install4j.api.beans.Anchor" value="NORTH" />
+            </serializedBean>
+            <formComponents>
+              <group id="757" beanClass="com.install4j.runtime.beans.groups.VerticalFormComponentGroup" useExternalParametrization="true" externalParametrizationName="Customize title bar" externalParametrizationMode="include">
+                <serializedBean>
+                  <property name="backgroundColor">
+                    <object class="com.install4j.runtime.beans.LightOrDarkColor">
+                      <object class="java.awt.Color">
+                        <int>255</int>
+                        <int>255</int>
+                        <int>255</int>
+                        <int>255</int>
+                      </object>
+                      <object class="java.awt.Color">
+                        <int>49</int>
+                        <int>52</int>
+                        <int>53</int>
+                        <int>255</int>
+                      </object>
+                    </object>
+                  </property>
+                  <property name="borderSides">
+                    <object class="com.install4j.runtime.beans.formcomponents.BorderSides">
+                      <property name="bottom" type="boolean" value="true" />
+                    </object>
+                  </property>
+                  <property name="imageAnchor" type="enum" class="com.install4j.api.beans.Anchor" value="NORTHEAST" />
+                  <property name="imageEdgeBorderWidth" type="int" value="2" />
+                  <property name="imageFile">
+                    <object class="com.install4j.api.beans.ExternalFile">
+                      <string>icon:${installer:sys.installerApplicationMode}_header.png</string>
+                    </object>
+                  </property>
+                  <property name="imageInsets">
+                    <object class="java.awt.Insets">
+                      <int>0</int>
+                      <int>5</int>
+                      <int>1</int>
+                      <int>1</int>
+                    </object>
+                  </property>
+                  <property name="insets">
+                    <object class="java.awt.Insets">
+                      <int>0</int>
+                      <int>20</int>
+                      <int>0</int>
+                      <int>10</int>
+                    </object>
+                  </property>
+                </serializedBean>
+                <beans>
+                  <formComponent name="Title" id="758" beanClass="com.install4j.runtime.beans.styles.ScreenTitleComponent">
+                    <serializedBean>
+                      <property name="labelFontStyle" type="enum" class="com.install4j.runtime.beans.formcomponents.FontStyle" value="BOLD" />
+                      <property name="labelFontType" type="enum" class="com.install4j.runtime.beans.formcomponents.FontType" value="DERIVED" />
+                    </serializedBean>
+                  </formComponent>
+                  <formComponent name="Subtitle" id="759" beanClass="com.install4j.runtime.beans.styles.ScreenTitleComponent" insetLeft="8">
+                    <serializedBean>
+                      <property name="titleType" type="enum" class="com.install4j.runtime.beans.styles.TitleType" value="SUB_TITLE" />
+                    </serializedBean>
+                  </formComponent>
+                </beans>
+                <externalParametrizationPropertyNames>
+                  <propertyName>backgroundColor</propertyName>
+                  <propertyName>foregroundColor</propertyName>
+                  <propertyName>imageAnchor</propertyName>
+                  <propertyName>imageFile</propertyName>
+                  <propertyName>imageOverlap</propertyName>
+                </externalParametrizationPropertyNames>
+              </group>
+            </formComponents>
+          </style>
+          <style name="Standard footer" id="760" beanClass="com.install4j.runtime.beans.styles.FormStyle">
+            <serializedBean>
+              <property name="fillVertical" type="boolean" value="false" />
+              <property name="standalone" type="boolean" value="false" />
+              <property name="verticalAnchor" type="enum" class="com.install4j.api.beans.Anchor" value="SOUTH" />
+            </serializedBean>
+            <formComponents>
+              <group id="761" beanClass="com.install4j.runtime.beans.groups.HorizontalFormComponentGroup">
+                <serializedBean>
+                  <property name="alignFirstLabel" type="boolean" value="false" />
+                  <property name="insets">
+                    <object class="java.awt.Insets">
+                      <int>3</int>
+                      <int>5</int>
+                      <int>8</int>
+                      <int>5</int>
+                    </object>
+                  </property>
+                </serializedBean>
+                <beans>
+                  <formComponent id="762" beanClass="com.install4j.runtime.beans.formcomponents.SpringComponent" />
+                  <formComponent name="Back button" id="763" beanClass="com.install4j.runtime.beans.styles.StandardControlButtonComponent">
+                    <serializedBean>
+                      <property name="buttonText" type="string">&lt; ${i18n:ButtonBack}</property>
+                      <property name="controlButtonType" type="enum" class="com.install4j.api.context.ControlButtonType" value="PREVIOUS" />
+                    </serializedBean>
+                  </formComponent>
+                  <formComponent name="Next button" id="764" beanClass="com.install4j.runtime.beans.styles.StandardControlButtonComponent">
+                    <serializedBean>
+                      <property name="buttonText" type="string">${i18n:ButtonNext} &gt;</property>
+                      <property name="controlButtonType" type="enum" class="com.install4j.api.context.ControlButtonType" value="NEXT" />
+                    </serializedBean>
+                  </formComponent>
+                  <formComponent name="Cancel button" id="765" beanClass="com.install4j.runtime.beans.styles.StandardControlButtonComponent" insetLeft="5">
+                    <serializedBean>
+                      <property name="buttonText" type="string">${i18n:ButtonCancel}</property>
+                      <property name="controlButtonType" type="enum" class="com.install4j.api.context.ControlButtonType" value="CANCEL" />
+                    </serializedBean>
+                  </formComponent>
+                </beans>
+              </group>
+            </formComponents>
+          </style>
+        </beans>
+      </group>
+    </styles>
+  </installerGui>
+  <mediaSets>
+    <windows name="Windows 64bit" id="57" mediaFileName="accsyn-daemon-win64" installDir="Accsyn" postProcessor="&quot;C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\signtool.exe&quot; sign /a /tr http://rfc3161timestamp.globalsign.com/advanced /td SHA256 $EXECUTABLE" failOnPostProcessorError="true" architecture="64">
+      <exclude>
+        <entry location="accsyncli" />
+      </exclude>
+      <variables>
+        <variable name="filmub_daemon_executable" value="AccsynService" />
+      </variables>
+      <jreBundle includedJre="windows-amd64-1.8.0_202" />
+    </windows>
+    <unixInstaller name="Unix Installer" id="62" mediaFileName="accsyn-daemon-unix" installDir="accsyn" customInstallBaseDir="/usr/local">
+      <variables>
+        <variable name="filmub_daemon_executable" value="accsyndaemon" />
+      </variables>
+      <jreBundle jreBundleSource="none" />
+    </unixInstaller>
+    <macosFolder name="Mac OS X Folder" id="315" mediaFileName="accsyn-daemon-macosx" installDir="Accsyn" signLaunchers="true" />
+  </mediaSets>
+  <buildIds buildAll="false">
+    <mediaSet refId="315" />
+  </buildIds>
+  <buildOptions verbose="true" disableSigning="true" disableNotarization="true" />
+</install4j>
