@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<install4j version="10.0.7" transformSequenceNumber="10">
+<install4j version="10.0.8" transformSequenceNumber="10">
   <directoryPresets config="./lib/noarch" />
   <application name="accsyn" applicationId="0463-6243-7202-1955" mediaDir="./build/${compiler:accsyn_version}/" shortName="accsyn" publisher="HDR AB" publisherWeb="https://accsyn.com" version="${compiler:accsyn_version}" allPathsRelative="true" autoSave="true" macVolumeId="3ce254201a13dfaa" javaMinVersion="1.7" javaMaxVersion="30">
     <variables>
       <variable name="accsyn_executable" value="accsyn" />
-      <variable name="accsyn_version" value="3.0-0_4" />
+      <variable name="accsyn_version" value="3.0-7_5" />
     </variables>
-    <codeSigning macEnabled="true" macPkcs12File="/Users/henriknorin/Documents/accsyn/dev/encrypted/cert/apple/apple.p12" windowsEnabled="true" windowsPkcs12File="/Users/henriknorin/Documents/accsyn/dev/encrypted/cert/codesign/codesign.p12" macNotarize="true" appleId="henrik.norin@highdefinitionrender.com" />
+    <codeSigning macEnabled="true" macPkcs12File="/Users/henriknorin/Documents/accsyn/dev/encrypted/cert/apple/apple.p12" windowsEnabled="true" windowsKeySource="pkcs11" windowsPkcs12File="/Users/henriknorin/Documents/accsyn/dev/encrypted/cert/codesign/codesign.p12" windowsPkcs11Library="/Library/Frameworks/eToken.framework/Versions/A/libeToken.dylib" macNotarize="true" appleId="henrik.norin@highdefinitionrender.com">
+      <windowsPkcs11Identifier issuer="Sectigo Public Code Signing CA EV R36" serial="ffea9316e6d0e321c978809f3b1030b" subject="High Definition Render AB" />
+    </codeSigning>
     <jreBundles jdkProviderId="AdoptOpenJDK" release="18/jdk-18+36" />
   </application>
   <files>
     <mountPoints>
       <mountPoint id="122" location="lib" />
       <mountPoint id="123" location="lib/noarch" />
-      <mountPoint id="300" location="log" overrideMode="true" mode="777" />
     </mountPoints>
     <entries>
       <dirEntry mountPoint="123" file="./lib/noarch" overwriteMode="1" overrideOverwriteMode="true" subDirectory="noarch">
@@ -25,9 +26,32 @@
     </entries>
   </files>
   <launchers>
-    <launcher name="accsyn Desktop App" id="56" macBundleBinary="accsyn">
-      <executable name="${compiler:accsyn_executable}" iconSet="true" stderrFile="log${installer:sys.fileSeparator}accsyn-crash.log.txt" stderrMode="append" executableMode="gui" changeWorkingDirectory="false" />
-      <splashScreen show="true" bitmapFile="./resource/graphics/accsyn-splashscreen.png" />
+    <launcher name="accsyn App" id="56" macBundleBinary="accsyn">
+      <executable name="${compiler:accsyn_executable} App" iconSet="true" stderrFile="${installer:sys.tempDir}${installer:sys.fileSeparator}.accsyn${installer:sys.fileSeparator}accsyn-stderr.log.txt" stderrMode="append" stdoutFile="${installer:sys.tempDir}${installer:sys.fileSeparator}accsyn-stdout.log.txt" executableMode="gui" changeWorkingDirectory="false" />
+      <splashScreen show="true" width="280" height="110" bitmapFile="./resource/graphics/accsyn-splashscreen.png" textOverlay="true">
+        <text>
+          <versionLine x="23" y="88" text="v${compiler:sys.version}" />
+        </text>
+      </splashScreen>
+      <java mainClass="com.accsyn.ASCMD" vmParameters="-Xmx512m">
+        <classPath>
+          <scanDirectory location="lib/noarch" failOnError="false" />
+        </classPath>
+      </java>
+      <iconImageFiles>
+        <file path="./resource/graphics/accsyn_icon_32.png" />
+        <file path="./resource/graphics/accsyn_icon_48.png" />
+        <file path="./resource/graphics/accsyn_icon_64.png" />
+        <file path="./resource/graphics/accsyn_icon_128.png" />
+        <file path="./resource/graphics/accsyn_icon_512.png" />
+      </iconImageFiles>
+      <macStaticAssociations>
+        <urlHandler scheme="accsyn" />
+      </macStaticAssociations>
+    </launcher>
+    <launcher name="accsyn CLI" id="681" macBundleBinary="accsyn">
+      <executable name="${compiler:accsyn_executable}" iconSet="true" redirectStderr="false" stderrFile="${installer:sys.tempDir}${installer:sys.fileSeparator}accsyn-stderr.log.txt" stderrMode="append" stdoutFile="${installer:sys.tempDir}${installer:sys.fileSeparator}accsyn-stdout.log.txt" executableMode="console" changeWorkingDirectory="false" />
+      <splashScreen bitmapFile="./resource/graphics/accsyn-splashscreen.png" />
       <java mainClass="com.accsyn.ASCMD" vmParameters="-Xmx512m">
         <classPath>
           <scanDirectory location="lib/noarch" failOnError="false" />
@@ -79,7 +103,7 @@
           <property name="disableConsoleOnWindows" type="boolean" value="true" />
           <property name="executionMode" type="enum" class="com.install4j.runtime.beans.applications.ExecutionMode" value="UNATTENDED_WITH_PROGRESS" />
           <property name="frameWidth" type="int" value="600" />
-          <property name="splashMessage" type="string">Preparing setup</property>
+          <property name="splashMessage" type="string">Installing...</property>
           <property name="useCustomIcon" type="boolean" value="true" />
         </serializedBean>
         <styleOverrides>
@@ -874,9 +898,7 @@ file.getParent() != null || (file.getName().endsWith(".app") &amp;&amp; director
     </styles>
   </installerGui>
   <mediaSets>
-    <windows name="Windows 64bit" id="57" mediaFileName="accsyn-win64" installDir="Accsyn" postProcessor="&quot;C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\signtool.exe&quot; sign /a /tr http://rfc3161timestamp.globalsign.com/advanced /td SHA256 $EXECUTABLE" architecture="64">
-      <jreBundle includedJre="windows-amd64-1.8.0_202" />
-    </windows>
+    <windows name="Windows 64bit" id="57" mediaFileName="accsyn-windows" installDir="Accsyn" postProcessor="&quot;C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\signtool.exe&quot; sign /a /tr http://rfc3161timestamp.globalsign.com/advanced /td SHA256 $EXECUTABLE" architecture="64" />
     <macosArchive name="Mac DMG" id="678" mediaFileName="accsyn-mac" architecture="universal" launcherId="56">
       <topLevelFiles>
         <symlink name="Applications" target="/Applications" />
@@ -893,7 +915,7 @@ file.getParent() != null || (file.getName().endsWith(".app") &amp;&amp; director
     </linuxDeb>
   </mediaSets>
   <buildIds buildAll="false">
-    <mediaSet refId="678" />
+    <mediaSet refId="57" />
   </buildIds>
-  <buildOptions verbose="true" disableSigning="true" disableNotarization="true" />
+  <buildOptions verbose="true" />
 </install4j>

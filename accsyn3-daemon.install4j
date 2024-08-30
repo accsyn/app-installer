@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<install4j version="10.0.7" transformSequenceNumber="10">
-  <directoryPresets config="./build/log/accsyn-daemon-crash.txt" />
+<install4j version="10.0.8" transformSequenceNumber="10">
+  <directoryPresets config="/Library/Frameworks/eToken.framework/Versions/A/libeToken.dylib" />
   <application name="accsyn Daemon" applicationId="8676-3927-8865-0640" mediaDir="./build/${compiler:accsyn_version}" shortName="accsyn" publisher="HDR AB" publisherWeb="https://accsyn.com" version="${compiler:accsyn_version}" allPathsRelative="true" autoSave="true" macVolumeId="ffab8b2ca215ea92" javaMinVersion="1.7" javaMaxVersion="30">
     <variables>
       <variable name="accsyn_executable" value="accsynApp" />
-      <variable name="accsyn_version" value="3.0-0_4" />
+      <variable name="accsyn_version" value="3.0-7_4" />
       <variable name="sys.ext.updatesFileName" value="updates_daemon.xml" />
     </variables>
-    <codeSigning macEnabled="true" macPkcs12File="/Users/henriknorin/Documents/accsyn/dev/encrypted/cert/apple/apple.p12" windowsEnabled="true" windowsPkcs12File="/Users/henriknorin/Documents/accsyn/dev/encrypted/cert/codesign/codesign.p12" macNotarize="true" appleId="henrik.norin@highdefinitionrender.com" />
+    <codeSigning macEnabled="true" macPkcs12File="/Users/henriknorin/Documents/accsyn/dev/encrypted/cert/apple/apple.p12" windowsEnabled="true" windowsKeySource="pkcs11" windowsPkcs12File="/Users/henriknorin/Documents/accsyn/dev/encrypted/cert/codesign/codesign.p12" windowsPkcs11Library="/Library/Frameworks/eToken.framework/Versions/A/libeToken.dylib" macNotarize="true" appleId="henrik.norin@highdefinitionrender.com">
+      <windowsPkcs11Identifier issuer="Sectigo Public Code Signing CA EV R36" serial="ffea9316e6d0e321c978809f3b1030b" subject="High Definition Render AB" />
+    </codeSigning>
     <jreBundles jdkProviderId="AdoptOpenJDK" release="18/jdk-18+36" />
   </application>
   <files>
@@ -26,9 +28,9 @@
     </entries>
   </files>
   <launchers>
-    <launcher name="accsynDaemon" id="56" icnsFile="../resources/graphics/accsyn_daemon_icon.icns">
-      <executable name="accsyndaemon" iconFile="./resources/graphics/accsyn_daemon_icon.ico" stderrFile="log${installer:sys.fileSeparator}accsyn-daemon-crash.log" stderrMode="append" stdoutFile="log${installer:sys.fileSeparator}accsyn-deadmon-output.log" stdoutMode="append" executableMode="service" changeWorkingDirectory="false" singleInstance="true" />
-      <splashScreen bitmapFile="./resources/graphics/accsyn-splashscreen.png" />
+    <launcher name="accsynDaemon" id="56" icnsFile="../resource/graphics/accsyn_daemon_icon.icns">
+      <executable name="accsyndaemon" iconFile="./resource/graphics/accsyn_daemon_icon.ico" stderrFile="log${installer:sys.fileSeparator}accsyn-daemon-crash.log" stderrMode="append" stdoutFile="log${installer:sys.fileSeparator}accsyn-deadmon-output.log" stdoutMode="append" executableMode="service" changeWorkingDirectory="false" singleInstance="true" />
+      <splashScreen bitmapFile="./resource/graphics/accsyn-splashscreen.png" />
       <java mainClass="com.accsyn.ASCMD" arguments="daemon">
         <classPath>
           <scanDirectory location="lib/noarch" failOnError="false" />
@@ -37,30 +39,30 @@
       <serviceFile>[Service]
 StandardOutput=null</serviceFile>
       <iconImageFiles>
-        <file path="./resources/graphics/accsyn_daemon_icon_32.png" />
-        <file path="./resources/graphics/accsyn_daemon_icon_48.png" />
-        <file path="./resources/graphics/accsyn_daemon_icon_64.png" />
+        <file path="./resource/graphics/accsyn_daemon_icon_32.png" />
+        <file path="./resource/graphics/accsyn_daemon_icon_48.png" />
+        <file path="./resource/graphics/accsyn_daemon_icon_64.png" />
       </iconImageFiles>
     </launcher>
-    <launcher name="accsyn App CLI" id="160" excludeFromMenu="true">
+    <launcher name="accsyn CLI" id="160" excludeFromMenu="true">
       <executable name="accsyn" iconSet="true" redirectStderr="false" stderrFile="log${installer:sys.fileSeparator}accsyn-cli-crash.log" stderrMode="append" executableMode="console" changeWorkingDirectory="false" />
-      <splashScreen bitmapFile="./resources/graphics/accsyn-splashscreen.png" />
+      <splashScreen bitmapFile="./resource/graphics/accsyn-splashscreen.png" />
       <java mainClass="com.accsyn.ASCMD" vmParameters="-Xmx3096m">
         <classPath>
           <scanDirectory location="lib/noarch" failOnError="false" />
         </classPath>
       </java>
       <iconImageFiles>
-        <file path="./resources/graphics/accsyn_console_icon_32.png" />
-        <file path="./resources/graphics/accsyn_console_icon_48.png" />
-        <file path="./resources/graphics/accsyn_console_icon_64.png" />
-        <file path="./resources/graphics/accsyn_console_icon_128.png" />
-        <file path="./resources/graphics/accsyn_console_icon_512.png" />
+        <file path="./resource/graphics/accsyn_console_icon_32.png" />
+        <file path="./resource/graphics/accsyn_console_icon_48.png" />
+        <file path="./resource/graphics/accsyn_console_icon_64.png" />
+        <file path="./resource/graphics/accsyn_console_icon_128.png" />
+        <file path="./resource/graphics/accsyn_console_icon_512.png" />
       </iconImageFiles>
     </launcher>
     <launcher name="accsyn App" id="372">
       <executable name="${compiler:accsyn_executable}" iconSet="true" stderrFile="log${installer:sys.fileSeparator}accsyn-gui-crash.log.txt" executableMode="gui" changeWorkingDirectory="false" />
-      <splashScreen show="true" bitmapFile="./resources/graphics/accsyn-splashscreen.png" />
+      <splashScreen show="true" bitmapFile="./resource/graphics/accsyn-splashscreen.png" />
       <java mainClass="com.accsyn.ASCMD" vmParameters="-Xmx512m" arguments="--gui">
         <classPath>
           <scanDirectory location="lib/noarch" failOnError="false" />
@@ -68,36 +70,19 @@ StandardOutput=null</serviceFile>
       </java>
       <vmOptionsFile mode="none" />
       <iconImageFiles>
-        <file path="./resources/graphics/accsyn_icon_32.png" />
-        <file path="./resources/graphics/accsyn_icon_48.png" />
-        <file path="./resources/graphics/accsyn_icon_64.png" />
-        <file path="./resources/graphics/accsyn_icon_128.png" />
-        <file path="./resources/graphics/accsyn_icon_512.png" />
+        <file path="./resource/graphics/accsyn_icon_32.png" />
+        <file path="./resource/graphics/accsyn_icon_48.png" />
+        <file path="./resource/graphics/accsyn_icon_64.png" />
+        <file path="./resource/graphics/accsyn_icon_128.png" />
+        <file path="./resource/graphics/accsyn_icon_512.png" />
       </iconImageFiles>
       <macStaticAssociations>
         <urlHandler scheme="accsyn" />
       </macStaticAssociations>
     </launcher>
-    <launcher name="accsyn App DEBUG" id="525" excludeFromMenu="true">
-      <executable name="${compiler:accsyn_executable}-debug" iconSet="true" redirectStderr="false" executableMode="console" changeWorkingDirectory="false" />
-      <splashScreen show="true" bitmapFile="./resources/graphics/accsyn-splashscreen.png" />
-      <java mainClass="com.accsyn.ASCMD" vmParameters="-Xmx512m" arguments="--debug --gui">
-        <classPath>
-          <scanDirectory location="lib/noarch" failOnError="false" />
-        </classPath>
-      </java>
-      <vmOptionsFile mode="none" />
-      <iconImageFiles>
-        <file path="./resources/graphics/accsyn_debug_icon_32.png" />
-        <file path="./resources/graphics/accsyn_debug_icon_48.png" />
-        <file path="./resources/graphics/accsyn_debug_icon_64.png" />
-        <file path="./resources/graphics/accsyn_debug_icon_128.png" />
-        <file path="./resources/graphics/accsyn_debug_icon_512.png" />
-      </iconImageFiles>
-    </launcher>
-    <launcher name="accsyn App CONSOLED" id="1717" excludeFromMenu="true">
+    <launcher name="accsyn App DEBUG" id="1717" excludeFromMenu="true">
       <executable name="${compiler:accsyn_executable}-console" iconSet="true" redirectStderr="false" executableMode="console" changeWorkingDirectory="false" />
-      <splashScreen show="true" bitmapFile="./resources/graphics/accsyn-splashscreen.png" />
+      <splashScreen show="true" bitmapFile="./resource/graphics/accsyn-splashscreen.png" />
       <java mainClass="com.accsyn.ASCMD" vmParameters="-Xmx512m" arguments="--gui">
         <classPath>
           <scanDirectory location="lib/noarch" failOnError="false" />
@@ -105,11 +90,11 @@ StandardOutput=null</serviceFile>
       </java>
       <vmOptionsFile mode="none" />
       <iconImageFiles>
-        <file path="./resources/graphics/accsyn_debug_icon_32.png" />
-        <file path="./resources/graphics/accsyn_debug_icon_48.png" />
-        <file path="./resources/graphics/accsyn_debug_icon_64.png" />
-        <file path="./resources/graphics/accsyn_debug_icon_128.png" />
-        <file path="./resources/graphics/accsyn_debug_icon_512.png" />
+        <file path="./resource/graphics/accsyn_debug_icon_32.png" />
+        <file path="./resource/graphics/accsyn_debug_icon_48.png" />
+        <file path="./resource/graphics/accsyn_debug_icon_64.png" />
+        <file path="./resource/graphics/accsyn_debug_icon_128.png" />
+        <file path="./resource/graphics/accsyn_debug_icon_512.png" />
       </iconImageFiles>
     </launcher>
   </launchers>
@@ -128,27 +113,27 @@ StandardOutput=null</serviceFile>
           <property name="customIconImageFiles">
             <add>
               <object class="com.install4j.api.beans.ExternalFile">
-                <string>./resources/graphics/accsyn_daemon_install_icon_32.png</string>
+                <string>./resource/graphics/accsyn_daemon_install_icon_32.png</string>
               </object>
             </add>
             <add>
               <object class="com.install4j.api.beans.ExternalFile">
-                <string>./resources/graphics/accsyn_daemon_install_icon_48.png</string>
+                <string>./resource/graphics/accsyn_daemon_install_icon_48.png</string>
               </object>
             </add>
             <add>
               <object class="com.install4j.api.beans.ExternalFile">
-                <string>./resources/graphics/accsyn_daemon_install_icon_64.png</string>
+                <string>./resource/graphics/accsyn_daemon_install_icon_64.png</string>
               </object>
             </add>
             <add>
               <object class="com.install4j.api.beans.ExternalFile">
-                <string>./resources/graphics/accsyn_daemon_install_icon_128.png</string>
+                <string>./resource/graphics/accsyn_daemon_install_icon_128.png</string>
               </object>
             </add>
             <add>
               <object class="com.install4j.api.beans.ExternalFile">
-                <string>./resources/graphics/accsyn_daemon_install_icon_512.png</string>
+                <string>./resource/graphics/accsyn_daemon_install_icon_512.png</string>
               </object>
             </add>
           </property>
@@ -1424,7 +1409,7 @@ file.getParent() != null || (file.getName().endsWith(".app") &amp;&amp; director
     </styles>
   </installerGui>
   <mediaSets>
-    <windows name="Windows 64bit" id="57" mediaFileName="accsyn-daemon-win64" installDir="Accsyn" postProcessor="&quot;C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\signtool.exe&quot; sign /a /tr http://rfc3161timestamp.globalsign.com/advanced /td SHA256 $EXECUTABLE" failOnPostProcessorError="true" architecture="64">
+    <windows name="Windows 64bit" id="57" mediaFileName="accsyn-daemon-windows" installDir="Accsyn" postProcessor="&quot;C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\signtool.exe&quot; sign /a /tr http://rfc3161timestamp.globalsign.com/advanced /td SHA256 $EXECUTABLE" failOnPostProcessorError="true" architecture="64">
       <exclude>
         <entry location="accsyncli" />
       </exclude>
@@ -1439,10 +1424,12 @@ file.getParent() != null || (file.getName().endsWith(".app") &amp;&amp; director
       </variables>
       <jreBundle jreBundleSource="none" />
     </unixInstaller>
-    <macosFolder name="Mac OS X Folder" id="315" mediaFileName="accsyn-daemon-macosx" installDir="Accsyn" signLaunchers="true" />
+    <macosFolder name="Mac OS X Folder" id="315" mediaFileName="accsyn-daemon-mac" installDir="Accsyn" signLaunchers="true" />
   </mediaSets>
   <buildIds buildAll="false">
+    <mediaSet refId="57" />
+    <mediaSet refId="62" />
     <mediaSet refId="315" />
   </buildIds>
-  <buildOptions verbose="true" disableSigning="true" disableNotarization="true" />
+  <buildOptions verbose="true" disableSigning="true" />
 </install4j>

@@ -64,8 +64,14 @@ public class ASICommon {
 		return System.getenv("AS_DEV") != null;
 	}
 
-	// Registry REST calls
-
+	// Logging
+	
+	public static final String debug(String s) {
+		if (isDEV())
+			info("[DEBUG] "+s);
+		return s;
+	}
+	
 	public static final String info(String s) {
 		Util.logInfo("Accsyn-installer", "(ASI, " + (new Date()) + ") " + s);
 		System.out.println("(ASI, " + (new Date()) + ") " + s);
@@ -109,7 +115,7 @@ public class ASICommon {
 		error(s);
 		return s;
 	}
-
+	
 	public static String getOS() {
 
 		String s = System.getProperty("os.name");
@@ -192,6 +198,9 @@ public class ASICommon {
 			warning(e);
 		}
 	}
+	
+	// Shell execution
+	
 	public static String[] generateCommandLine(String executable, String[] args) {
 		String cmd[];
 		if (getOS().equals(OS_WINDOWS)) {
@@ -497,7 +506,10 @@ public class ASICommon {
 	 * info("Downloaded cert '" + result.getName() + "'(" + size + "b)"); } catch
 	 * (IOException e) { error(e); } return result; }
 	 */
-
+	
+	
+	// REST call
+	
 	public static JSONObject serializeRESTData(JSONObject d) {
 		for (Iterator<String> iterator = d.keySet().iterator(); iterator.hasNext();) {
 			String key = iterator.next();
@@ -581,7 +593,7 @@ public class ASICommon {
 			port = 8180;
 		} else {
 			if (workspace == null)
-				hostname = "https://api.master.accsyn.com";
+				hostname = "https://master.accsyn.com";
 			else
 				hostname = "https://" + workspace + ".accsyn.com";
 		}
@@ -600,8 +612,6 @@ public class ASICommon {
 
 					// Proxy applied?
 					String proxy_hostname_port = System.getenv("ACCSYN_PROXY");
-					if (proxy_hostname_port == null)
-						proxy_hostname_port = System.getenv("FILMHUB_PROXY");
 					if (proxy_hostname_port != null) {
 						String[] parts = proxy_hostname_port.split(":");
 						String _hostname;
@@ -644,23 +654,23 @@ public class ASICommon {
 					case REST_GET:
 						str_method = "GET";
 						url_with_query = url + (data != null && 0 < data.size() ? "?" + URLEncoder.encode(text, "UTF-8").replaceAll("\\+", "%20") : "");
-						info("Rest " + str_method + " > " + url_with_query + (text != null ? " (raw JSON: " + text + ")" : "") + " (port: " + port + ", ssl: " + ssl + ")");
+						debug("Rest " + str_method + " > " + url_with_query + (text != null ? " (raw JSON: " + text + ")" : "") + " (port: " + port + ", ssl: " + ssl + ")");
 						req = new HttpGet(url_with_query);
 						break;
 					case REST_PUT:
 						str_method = "PUT";
 						req = new HttpPut(url);
-						info("Rest " + str_method + " > " + url + ", payload: " + text + " (port: " + port + ", ssl: " + ssl + ")");
+						debug("Rest " + str_method + " > " + url + ", payload: " + text + " (port: " + port + ", ssl: " + ssl + ")");
 						break;
 					case REST_POST:
 						str_method = "POST";
 						req = new HttpPost(url);
-						info("Rest " + str_method + " > " + url + ", payload: " + text + " (port: " + port + ", ssl: " + ssl + ")");
+						debug("Rest " + str_method + " > " + url + ", payload: " + text + " (port: " + port + ", ssl: " + ssl + ")");
 						break;
 					case REST_DELETE:
 						str_method = "DELETE";
 						url_with_query = url + (data != null && 0 < data.size() ? "?" + URLEncoder.encode(text, "UTF-8").replaceAll("\\+", "%20") : "");
-						info("Rest " + str_method + " > " + url_with_query + " (raw: " + text + ")" + " (port: " + port + ", ssl: " + ssl + ")");
+						debug("Rest " + str_method + " > " + url_with_query + " (raw: " + text + ")" + " (port: " + port + ", ssl: " + ssl + ")");
 						req = new HttpDelete(url_with_query);
 						break;
 					default:
@@ -706,7 +716,7 @@ public class ASICommon {
 					try {
 						iterations += 1;
 						response = httpClient.execute(req, handler);
-						info("Rest response: " + response);
+						debug("Rest response: " + response);
 						if (isDEV())
 							System.out.print(response.length() + "b:" + (System.currentTimeMillis() - millis_start) + "ms~");
 						JSONObject retval = null;
@@ -715,8 +725,7 @@ public class ASICommon {
 						} catch (org.json.simple.parser.ParseException e1) {
 							retval = new JSONObject();
 							retval.put("message", "Could not parse JSON! Details: " + e1);
-							if (isDEV())
-								info("Could not parse REST response JSON: '" + response + "'");
+							debug("Could not parse REST response JSON: '" + response + "'");
 							return retval;
 						}
 						if (retval.containsKey("exception")) {
