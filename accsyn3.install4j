@@ -4,7 +4,7 @@
   <application name="accsyn" applicationId="0463-6243-7202-1955" mediaDir="./build/${compiler:accsyn_version}/" shortName="accsyn" publisher="HDR AB" publisherWeb="https://accsyn.com" version="${compiler:accsyn_version}" allPathsRelative="true" autoSave="true" macVolumeId="3ce254201a13dfaa" javaMinVersion="1.7" javaMaxVersion="30">
     <variables>
       <variable name="accsyn_executable" value="accsyn" />
-      <variable name="accsyn_version" value="3.0-7_5" />
+      <variable name="accsyn_version" value="3.0-9_1" />
     </variables>
     <codeSigning macEnabled="true" macPkcs12File="/Users/henriknorin/Documents/accsyn/dev/encrypted/cert/apple/apple.p12" windowsEnabled="true" windowsKeySource="pkcs11" windowsPkcs12File="/Users/henriknorin/Documents/accsyn/dev/encrypted/cert/codesign/codesign.p12" windowsPkcs11Library="/Library/Frameworks/eToken.framework/Versions/A/libeToken.dylib" macNotarize="true" appleId="henrik.norin@highdefinitionrender.com">
       <windowsPkcs11Identifier issuer="Sectigo Public Code Signing CA EV R36" serial="ffea9316e6d0e321c978809f3b1030b" subject="High Definition Render AB" />
@@ -27,10 +27,10 @@
   </files>
   <launchers>
     <launcher name="accsyn App" id="56" macBundleBinary="accsyn">
-      <executable name="${compiler:accsyn_executable} App" iconSet="true" stderrFile="${installer:sys.tempDir}${installer:sys.fileSeparator}.accsyn${installer:sys.fileSeparator}accsyn-stderr.log.txt" stderrMode="append" stdoutFile="${installer:sys.tempDir}${installer:sys.fileSeparator}accsyn-stdout.log.txt" executableMode="gui" changeWorkingDirectory="false" />
+      <executable name="${compiler:accsyn_executable} App" iconSet="true" stderrFile="${installer:sys.tempDir}${installer:sys.fileSeparator}.accsyn${installer:sys.fileSeparator}accsyn-stderr.log.txt" stderrMode="append" stdoutFile="${installer:sys.tempDir}${installer:sys.fileSeparator}accsyn-stdout.log.txt" executableMode="gui" changeWorkingDirectory="false" singleInstance="true" />
       <splashScreen show="true" width="280" height="110" bitmapFile="./resource/graphics/accsyn-splashscreen.png" textOverlay="true">
         <text>
-          <versionLine x="23" y="88" text="v${compiler:sys.version}" />
+          <versionLine x="51" y="89" text="v${compiler:sys.version}" bold="true" />
         </text>
       </splashScreen>
       <java mainClass="com.accsyn.ASCMD" vmParameters="-Xmx512m">
@@ -64,9 +64,6 @@
         <file path="./resource/graphics/accsyn_icon_128.png" />
         <file path="./resource/graphics/accsyn_icon_512.png" />
       </iconImageFiles>
-      <macStaticAssociations>
-        <urlHandler scheme="accsyn" />
-      </macStaticAssociations>
     </launcher>
   </launchers>
   <installerGui autoUpdateDescriptorUrl="https://accsyn.com/app/v1/updates.xml">
@@ -900,6 +897,9 @@ file.getParent() != null || (file.getName().endsWith(".app") &amp;&amp; director
   <mediaSets>
     <windows name="Windows 64bit" id="57" mediaFileName="accsyn-windows" installDir="Accsyn" postProcessor="&quot;C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\signtool.exe&quot; sign /a /tr http://rfc3161timestamp.globalsign.com/advanced /td SHA256 $EXECUTABLE" architecture="64" />
     <macosArchive name="Mac DMG" id="678" mediaFileName="accsyn-mac" architecture="universal" launcherId="56">
+      <variables>
+        <variable name="accsyn_executable" value="accsynApp" />
+      </variables>
       <topLevelFiles>
         <symlink name="Applications" target="/Applications" />
       </topLevelFiles>
@@ -916,6 +916,8 @@ file.getParent() != null || (file.getName().endsWith(".app") &amp;&amp; director
   </mediaSets>
   <buildIds buildAll="false">
     <mediaSet refId="57" />
+    <mediaSet refId="678" />
+    <mediaSet refId="62" />
   </buildIds>
   <buildOptions verbose="true" />
 </install4j>

@@ -4,7 +4,7 @@
   <application name="accsyn Daemon" applicationId="8676-3927-8865-0640" mediaDir="./build/${compiler:accsyn_version}" shortName="accsyn" publisher="HDR AB" publisherWeb="https://accsyn.com" version="${compiler:accsyn_version}" allPathsRelative="true" autoSave="true" macVolumeId="ffab8b2ca215ea92" javaMinVersion="1.7" javaMaxVersion="30">
     <variables>
       <variable name="accsyn_executable" value="accsynApp" />
-      <variable name="accsyn_version" value="3.0-7_4" />
+      <variable name="accsyn_version" value="3.0-15_1" />
       <variable name="sys.ext.updatesFileName" value="updates_daemon.xml" />
     </variables>
     <codeSigning macEnabled="true" macPkcs12File="/Users/henriknorin/Documents/accsyn/dev/encrypted/cert/apple/apple.p12" windowsEnabled="true" windowsKeySource="pkcs11" windowsPkcs12File="/Users/henriknorin/Documents/accsyn/dev/encrypted/cert/codesign/codesign.p12" windowsPkcs11Library="/Library/Frameworks/eToken.framework/Versions/A/libeToken.dylib" macNotarize="true" appleId="henrik.norin@highdefinitionrender.com">
@@ -433,7 +433,7 @@ return console.askOkCancel(message, true);
                       <property name="labelText" type="string">Workspace:</property>
                     </serializedBean>
                   </formComponent>
-                  <formComponent name="Domain" id="1063" beanClass="com.install4j.runtime.beans.formcomponents.LabelComponent" insetLeft="25">
+                  <formComponent name="Workspace" id="1063" beanClass="com.install4j.runtime.beans.formcomponents.LabelComponent" insetLeft="25">
                     <serializedBean>
                       <property name="labelFont">
                         <object class="java.awt.Font">
@@ -445,6 +445,7 @@ return console.askOkCancel(message, true);
                       <property name="labelFontType" type="enum" class="com.install4j.runtime.beans.formcomponents.FontType" value="CUSTOM" />
                       <property name="labelText" type="string">${installer:accsyn_workspace}</property>
                     </serializedBean>
+                    <visibilityScript>(String)context.getVariable("accsyn_workspace") != null</visibilityScript>
                   </formComponent>
                 </beans>
               </group>
@@ -1427,9 +1428,7 @@ file.getParent() != null || (file.getName().endsWith(".app") &amp;&amp; director
     <macosFolder name="Mac OS X Folder" id="315" mediaFileName="accsyn-daemon-mac" installDir="Accsyn" signLaunchers="true" />
   </mediaSets>
   <buildIds buildAll="false">
-    <mediaSet refId="57" />
-    <mediaSet refId="62" />
     <mediaSet refId="315" />
   </buildIds>
-  <buildOptions verbose="true" disableSigning="true" />
+  <buildOptions verbose="true" disableSigning="true" disableNotarization="true" />
 </install4j>

@@ -52,8 +52,8 @@ import com.install4j.api.screens.Console;
 public class ASIAuthScreen extends AbstractInstallerScreen implements ActionListener, ItemListener {
 
 	// GUI
-	static final String LABEL_01 = "Please launch installation of the new server from accsyn (https://YOURWORKSPACE.accsyn.com).";
-	static final String LABEL_02 = "Enter the server ID: ";
+	static final String LABEL_01 = "Please launch Daemon installation from https://accsyn.io";
+	static final String LABEL_02 = "Enter the code/ID: ";
 	static final String LABEL_03 = "Please enter choice [yes or no]: ";
 	static final String LABEL_04 = "Configuration data exist, ERASE configuration and do a clean installation?\n\n(Choosing No will keep and reuse current accsyn configuration)";
 
@@ -81,6 +81,8 @@ public class ASIAuthScreen extends AbstractInstallerScreen implements ActionList
 		panel.add(new JLabel("<html>" + LABEL_01 + "</html>"), c);
 		if (ASICommon.isDEV())
 			panel.add(new JLabel("<html><strong>!!! DEVELOPMENT MODE !!!</strong></html>"), c);
+		if (ASICommon.getRootPathEnv() != null)
+			panel.add(new JLabel("<html>!!! Root: "+ASICommon.getRootPathEnv()+"!!!</html>"), c);
 		panel.add(new JLabel(""), c);
 		/*
 		 * panel.add(new JLabel("<html>" + "Continue your domain setup or " +
@@ -150,6 +152,7 @@ public class ASIAuthScreen extends AbstractInstallerScreen implements ActionList
 			}
 		});
 		tf_id.setFont(new Font("Courier", tf_id.getFont().getStyle(), tf_id.getFont().getSize() + 2));
+		tf_id.setForeground(Color.BLACK);
 		c.gridwidth = GridBagConstraints.REMAINDER;
 		c.weightx = 30;
 		panel.add(new JLabel(), c);
@@ -262,7 +265,7 @@ public class ASIAuthScreen extends AbstractInstallerScreen implements ActionList
 			data.put("client", client_id);
 			data.put("hostname", ASICommon.getHostname());
 			try {
-				JSONObject response = ASICommon.rest(ASICommon.REST_GET, "client/check", data);
+				JSONObject response = ASICommon.rest(ASICommon.REST_PUT, "client/check", data);
 				if (response.containsKey("message")) {
 					JOptionPane.showMessageDialog(null, response.get("message"), "Authentication", JOptionPane.WARNING_MESSAGE);
 					return false;

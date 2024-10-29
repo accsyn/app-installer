@@ -338,7 +338,7 @@ public class ASICommon {
 		return f;
 	}
 	
-	private static String getRootPathEnv() {
+	public static String getRootPathEnv() {
 		return System.getenv("AS_ROOT_PATH");
 	}	
 	
@@ -400,7 +400,7 @@ public class ASICommon {
 		else if (getOS().equals(OS_MAC))
 			retval = getRootDir() + File.separator + "Library" + File.separator + "Application Support" + File.separator + "com.accsyn" + File.separator + "data";
 		else
-			retval = getRootDir() + File.separator + "var" + File.separator + "lib" + File.separator +  "accsyn";
+			retval = getRootDir() + File.separator + "var" + File.separator + "lib" + File.separator +  "accsyn" + File.separator + "data";
 		
 		File f = ensureDirExists(new File(retval));
 

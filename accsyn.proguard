@@ -1,22 +1,41 @@
--injars build/lib/noarch_raw/as.jar
--outjars build/lib/noarch/as.jar
+-injars lib/noarch_raw/as.jar
+-outjars lib/noarch/as.jar
 
--libraryjars /Library/Java/JavaVirtualMachines/jdk1.8.0_151.jdk/Contents/Home/jre/lib/rt.jar
--libraryjars build/lib/noarch/commons-cli-1.4.jar
--libraryjars build/lib/noarch/commons-codec-1.6.jar
--libraryjars build/lib/noarch/commons-logging-1.1.3.jar
--libraryjars build/lib/noarch/filedrop.jar
--libraryjars build/lib/noarch/httpclient-4.3.5.jar
--libraryjars build/lib/noarch/httpclient-cache-4.3.5.jar
--libraryjars build/lib/noarch/httpcore-4.3.2.jar
--libraryjars build/lib/noarch/jcommander-1.7.jar
--libraryjars build/lib/noarch/json_simple-1.1.jar
--libraryjars /Library/Java/JavaVirtualMachines/jdk1.8.0_151.jdk/Contents/Home/jre/lib/jce.jar
--libraryjars build/lib/noarch/i4jruntime.jar
+-libraryjars '/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home/lib/rt.jar'
+-libraryjars '/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home/lib/jce.jar'
+-libraryjars lib/noarch/annotations-13.0.jar
+-libraryjars lib/noarch/auth0-2.10.1.jar
+-libraryjars lib/noarch/commons-cli-1.4.jar
+-libraryjars lib/noarch/commons-codec-1.6.jar
+-libraryjars lib/noarch/commons-logging-1.1.3.jar
+-libraryjars lib/noarch/failsafe-2.4.4.jar
+-libraryjars lib/noarch/filedrop.jar
+-libraryjars lib/noarch/httpclient-4.3.5.jar
+-libraryjars lib/noarch/httpclient-cache-4.3.5.jar
+-libraryjars lib/noarch/httpcore-4.3.2.jar
+-libraryjars lib/noarch/i4jruntime.jar
+-libraryjars lib/noarch/jackson-annotations-2.14.2.jar
+-libraryjars lib/noarch/jackson-core-2.14.2.jar
+-libraryjars lib/noarch/jackson-databind-2.14.2.jar
+-libraryjars lib/noarch/jackson-dataformat-yaml-2.14.2.jar
+-libraryjars lib/noarch/java-jwt-4.4.0.jar
+-libraryjars lib/noarch/jcommander-1.7.jar
+-libraryjars lib/noarch/jdatepicker-1.3.4.jar
+-libraryjars lib/noarch/json_simple-1.1.jar
+-libraryjars lib/noarch/kotlin-stdlib-1.6.20.jar
+-libraryjars lib/noarch/kotlin-stdlib-common-1.6.20.jar
+-libraryjars lib/noarch/kotlin-stdlib-jdk7-1.6.20.jar
+-libraryjars lib/noarch/kotlin-stdlib-jdk8-1.6.20.jar
+-libraryjars lib/noarch/logging-interceptor-4.11.0.jar
+-libraryjars lib/noarch/okhttp-4.11.0.jar
+-libraryjars lib/noarch/okio-3.5.0.jar
+-libraryjars lib/noarch/okio-jvm-3.5.0.jar
+-libraryjars lib/noarch/snakeyaml-2.2.jar
 
 -forceprocessing
--printmapping build/1.2-2_8/proguard_mapping.txt
+-printmapping build/3.0-7_19/proguard_mapping.txt
 -verbose
+-ignorewarnings
 
 
 
