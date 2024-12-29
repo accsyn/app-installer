@@ -4,7 +4,7 @@
   <application name="accsyn Daemon" applicationId="8676-3927-8865-0640" mediaDir="./build/${compiler:accsyn_version}" shortName="accsyn" publisher="HDR AB" publisherWeb="https://accsyn.com" version="${compiler:accsyn_version}" allPathsRelative="true" autoSave="true" macVolumeId="ffab8b2ca215ea92" javaMinVersion="1.7" javaMaxVersion="30">
     <variables>
       <variable name="accsyn_executable" value="accsynApp" />
-      <variable name="accsyn_version" value="3.0-15_1" />
+      <variable name="accsyn_version" value="3.0-26_22" />
       <variable name="sys.ext.updatesFileName" value="updates_daemon.xml" />
     </variables>
     <codeSigning macEnabled="true" macPkcs12File="/Users/henriknorin/Documents/accsyn/dev/encrypted/cert/apple/apple.p12" windowsEnabled="true" windowsKeySource="pkcs11" windowsPkcs12File="/Users/henriknorin/Documents/accsyn/dev/encrypted/cert/codesign/codesign.p12" windowsPkcs11Library="/Library/Frameworks/eToken.framework/Versions/A/libeToken.dylib" macNotarize="true" appleId="henrik.norin@highdefinitionrender.com">
@@ -62,7 +62,7 @@ StandardOutput=null</serviceFile>
     </launcher>
     <launcher name="accsyn App" id="372">
       <executable name="${compiler:accsyn_executable}" iconSet="true" stderrFile="log${installer:sys.fileSeparator}accsyn-gui-crash.log.txt" executableMode="gui" changeWorkingDirectory="false" />
-      <splashScreen show="true" bitmapFile="./resource/graphics/accsyn-splashscreen.png" />
+      <splashScreen bitmapFile="./resource/graphics/accsyn-splashscreen.png" />
       <java mainClass="com.accsyn.ASCMD" vmParameters="-Xmx512m" arguments="--gui">
         <classPath>
           <scanDirectory location="lib/noarch" failOnError="false" />
@@ -82,7 +82,7 @@ StandardOutput=null</serviceFile>
     </launcher>
     <launcher name="accsyn App DEBUG" id="1717" excludeFromMenu="true">
       <executable name="${compiler:accsyn_executable}-console" iconSet="true" redirectStderr="false" executableMode="console" changeWorkingDirectory="false" />
-      <splashScreen show="true" bitmapFile="./resource/graphics/accsyn-splashscreen.png" />
+      <splashScreen bitmapFile="./resource/graphics/accsyn-splashscreen.png" />
       <java mainClass="com.accsyn.ASCMD" vmParameters="-Xmx512m" arguments="--gui">
         <classPath>
           <scanDirectory location="lib/noarch" failOnError="false" />
@@ -622,7 +622,7 @@ return console.askOkCancel(message, true);
                   <property name="useStatus" type="boolean" value="true" />
                 </serializedBean>
               </action>
-              <action id="319" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" actionElevationType="elevated">
+              <action id="319" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" enabled="false" actionElevationType="elevated">
                 <serializedBean>
                   <property name="arguments" type="array" elementType="string" length="18">
                     <element index="0">advfirewall</element>
@@ -1428,7 +1428,7 @@ file.getParent() != null || (file.getName().endsWith(".app") &amp;&amp; director
     <macosFolder name="Mac OS X Folder" id="315" mediaFileName="accsyn-daemon-mac" installDir="Accsyn" signLaunchers="true" />
   </mediaSets>
   <buildIds buildAll="false">
-    <mediaSet refId="315" />
+    <mediaSet refId="57" />
   </buildIds>
   <buildOptions verbose="true" disableSigning="true" disableNotarization="true" />
 </install4j>
