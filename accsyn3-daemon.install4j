@@ -61,7 +61,7 @@ StandardOutput=null</serviceFile>
       </iconImageFiles>
     </launcher>
     <launcher name="accsyn App" id="372">
-      <executable name="${compiler:accsyn_executable}" iconSet="true" stderrFile="log${installer:sys.fileSeparator}accsyn-gui-crash.log.txt" executableMode="gui" changeWorkingDirectory="false" />
+      <executable name="${compiler:accsyn_executable}" iconSet="true" stderrFile="log${installer:sys.fileSeparator}accsyn-gui-crash.log.txt" executableMode="gui" changeWorkingDirectory="false" singleInstance="true" />
       <splashScreen bitmapFile="./resource/graphics/accsyn-splashscreen.png" />
       <java mainClass="com.accsyn.ASCMD" vmParameters="-Xmx512m" arguments="--gui">
         <classPath>
@@ -81,7 +81,7 @@ StandardOutput=null</serviceFile>
       </macStaticAssociations>
     </launcher>
     <launcher name="accsyn App DEBUG" id="1717" excludeFromMenu="true">
-      <executable name="${compiler:accsyn_executable}-console" iconSet="true" redirectStderr="false" executableMode="console" changeWorkingDirectory="false" />
+      <executable name="${compiler:accsyn_executable}-console" iconSet="true" redirectStderr="false" executableMode="console" changeWorkingDirectory="false" singleInstance="true" />
       <splashScreen bitmapFile="./resource/graphics/accsyn-splashscreen.png" />
       <java mainClass="com.accsyn.ASCMD" vmParameters="-Xmx512m" arguments="--gui">
         <classPath>
@@ -400,7 +400,7 @@ return console.askOkCancel(message, true);
             </formComponents>
           </screen>
           <screen id="1056" beanClass="com.accsyn.installer.ASIAuthScreen" actionElevationType="elevated" rollbackBarrierExitCode="0">
-            <condition>!context.isUpdateInstallation()&amp;&amp;(context.getVariable("accsyn_api_key")==null||((String)context.getVariable("accsyn_api_key")).length()==0)</condition>
+            <condition>!context.isUpdateInstallation()</condition>
           </screen>
           <screen id="1447" beanClass="com.accsyn.installer.ASIDaemonUserScreen" actionElevationType="elevated" rollbackBarrierExitCode="0">
             <condition>!context.isUpdateInstallation()&amp;&amp;context.getBooleanVariable("accsyn_daemon_do_install")</condition>
