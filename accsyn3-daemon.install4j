@@ -7,10 +7,10 @@
       <variable name="accsyn_version" value="3.0-26_22" />
       <variable name="sys.ext.updatesFileName" value="updates_daemon.xml" />
     </variables>
-    <codeSigning macEnabled="true" macPkcs12File="/Users/henriknorin/Documents/accsyn/dev/encrypted/cert/apple/apple.p12" windowsEnabled="true" windowsKeySource="pkcs11" windowsPkcs12File="/Users/henriknorin/Documents/accsyn/dev/encrypted/cert/codesign/codesign.p12" windowsPkcs11Library="/Library/Frameworks/eToken.framework/Versions/A/libeToken.dylib" macNotarize="true" appleId="henrik.norin@highdefinitionrender.com">
+    <codeSigning macEnabled="true" macPkcs12File="/Users/henriknorin/Documents/accsyn/dev/encrypted/cert/apple/apple.p12" windowsKeySource="pkcs11" windowsPkcs12File="/Users/henriknorin/Documents/accsyn/dev/encrypted/cert/codesign/codesign.p12" windowsPkcs11Library="/Library/Frameworks/eToken.framework/Versions/A/libeToken.dylib" macNotarize="true" appleId="henrik.norin@highdefinitionrender.com">
       <windowsPkcs11Identifier issuer="Sectigo Public Code Signing CA EV R36" serial="ffea9316e6d0e321c978809f3b1030b" subject="High Definition Render AB" />
     </codeSigning>
-    <jreBundles jdkProviderId="AdoptOpenJDK" release="18/jdk-18+36" />
+    <jreBundles jdkProviderId="Zulu" release="18/18.0.2" />
   </application>
   <files>
     <mountPoints>
@@ -63,7 +63,7 @@ StandardOutput=null</serviceFile>
     <launcher name="accsyn App" id="372">
       <executable name="${compiler:accsyn_executable}" iconSet="true" stderrFile="log${installer:sys.fileSeparator}accsyn-gui-crash.log.txt" executableMode="gui" changeWorkingDirectory="false" singleInstance="true" />
       <splashScreen bitmapFile="./resource/graphics/accsyn-splashscreen.png" />
-      <java mainClass="com.accsyn.ASCMD" vmParameters="-Xmx512m" arguments="--gui">
+      <java mainClass="com.accsyn.ASCMD" vmParameters="-Xmx512m --add-modules javafx.controls,javafx.graphics,javafx.media,javafx.swing" arguments="--gui">
         <classPath>
           <scanDirectory location="lib/noarch" failOnError="false" />
         </classPath>
@@ -83,7 +83,7 @@ StandardOutput=null</serviceFile>
     <launcher name="accsyn App DEBUG" id="1717" excludeFromMenu="true">
       <executable name="${compiler:accsyn_executable}-console" iconSet="true" redirectStderr="false" executableMode="console" changeWorkingDirectory="false" singleInstance="true" />
       <splashScreen bitmapFile="./resource/graphics/accsyn-splashscreen.png" />
-      <java mainClass="com.accsyn.ASCMD" vmParameters="-Xmx512m" arguments="--gui">
+      <java mainClass="com.accsyn.ASCMD" vmParameters="-Xmx512m --add-modules javafx.controls,javafx.graphics,javafx.media,javafx.swing" arguments="--gui">
         <classPath>
           <scanDirectory location="lib/noarch" failOnError="false" />
         </classPath>
@@ -1419,13 +1419,13 @@ file.getParent() != null || (file.getName().endsWith(".app") &amp;&amp; director
       </variables>
       <jreBundle includedJre="windows-amd64-1.8.0_202" />
     </windows>
+    <macosFolder name="Mac OS X" id="315" mediaFileName="accsyn-daemon-mac" installDir="Accsyn" signLaunchers="true" />
     <unixInstaller name="Unix Installer" id="62" mediaFileName="accsyn-daemon-unix" installDir="accsyn" customInstallBaseDir="/usr/local">
       <variables>
         <variable name="filmub_daemon_executable" value="accsyndaemon" />
       </variables>
       <jreBundle jreBundleSource="none" />
     </unixInstaller>
-    <macosFolder name="Mac OS X Folder" id="315" mediaFileName="accsyn-daemon-mac" installDir="Accsyn" signLaunchers="true" />
   </mediaSets>
   <buildIds buildAll="false">
     <mediaSet refId="57" />

@@ -6,10 +6,14 @@
       <variable name="accsyn_executable" value="accsyn" />
       <variable name="accsyn_version" value="3.0-9_1" />
     </variables>
-    <codeSigning macEnabled="true" macPkcs12File="/Users/henriknorin/Documents/accsyn/dev/encrypted/cert/apple/apple.p12" windowsEnabled="true" windowsKeySource="pkcs11" windowsPkcs12File="/Users/henriknorin/Documents/accsyn/dev/encrypted/cert/codesign/codesign.p12" windowsPkcs11Library="/Library/Frameworks/eToken.framework/Versions/A/libeToken.dylib" macNotarize="true" appleId="henrik.norin@highdefinitionrender.com">
+    <codeSigning macEnabled="true" macPkcs12File="/Users/henriknorin/Documents/accsyn/dev/encrypted/cert/apple/apple.p12" windowsKeySource="pkcs11" windowsPkcs12File="/Users/henriknorin/Documents/accsyn/dev/encrypted/cert/codesign/codesign.p12" windowsPkcs11Library="/Library/Frameworks/eToken.framework/Versions/A/libeToken.dylib" macNotarize="true" appleId="henrik.norin@highdefinitionrender.com">
       <windowsPkcs11Identifier issuer="Sectigo Public Code Signing CA EV R36" serial="ffea9316e6d0e321c978809f3b1030b" subject="High Definition Render AB" />
     </codeSigning>
-    <jreBundles jdkProviderId="AdoptOpenJDK" release="18/jdk-18+36" />
+    <jreBundles jdkProviderId="Zulu" release="18/18.0.2">
+      <modules>
+        <defaultModules set="all" />
+      </modules>
+    </jreBundles>
   </application>
   <files>
     <mountPoints>
@@ -20,7 +24,6 @@
       <dirEntry mountPoint="123" file="./lib/noarch" overwriteMode="1" overrideOverwriteMode="true" subDirectory="noarch">
         <exclude>
           <entry location=".DS_Store" />
-          <entry location="_ARCHIVE" />
         </exclude>
       </dirEntry>
     </entries>
@@ -33,7 +36,7 @@
           <versionLine x="51" y="89" text="v${compiler:sys.version}" bold="true" />
         </text>
       </splashScreen>
-      <java mainClass="com.accsyn.ASCMD" vmParameters="-Xmx512m">
+      <java mainClass="com.accsyn.ASCMD" vmParameters="-Xmx512m --add-modules javafx.controls,javafx.graphics,javafx.media,javafx.swing">
         <classPath>
           <scanDirectory location="lib/noarch" failOnError="false" />
         </classPath>
@@ -896,7 +899,7 @@ file.getParent() != null || (file.getName().endsWith(".app") &amp;&amp; director
   </installerGui>
   <mediaSets>
     <windows name="Windows 64bit" id="57" mediaFileName="accsyn-windows" installDir="Accsyn" postProcessor="&quot;C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\signtool.exe&quot; sign /a /tr http://rfc3161timestamp.globalsign.com/advanced /td SHA256 $EXECUTABLE" architecture="64" />
-    <macosArchive name="Mac DMG" id="678" mediaFileName="accsyn-mac" architecture="universal" launcherId="56">
+    <macosArchive name="Mac OS X" id="678" mediaFileName="accsyn-mac" architecture="universal" launcherId="56">
       <variables>
         <variable name="accsyn_executable" value="accsynApp" />
       </variables>

@@ -260,7 +260,7 @@ public class ASIAuthScreen extends AbstractInstallerScreen implements ActionList
 		ASICommon.info("next() mode:" + mode);
 		InstallerContext ic = getInstallerContext();
 		String client_id = tf_id.getText().trim();
-		if (client_id.length() == 0 || !client_id.matches("^[0-9a-f]{24}$")) {
+		if (client_id.length() == 0 || !client_id.toLowerCase().matches("^[0-9a-f]{24}$")) {
 			JOptionPane.showMessageDialog(null, MESSAGE_01, "Authentication", JOptionPane.WARNING_MESSAGE);
 			return false;
 		} else {
@@ -332,7 +332,7 @@ public class ASIAuthScreen extends AbstractInstallerScreen implements ActionList
 			while (client_id == null) {
 				console.print(LABEL_02);
 				String s = console.readLine();
-				if (s == null || !s.matches("^[0-9a-f]{24}$")) {
+				if (s == null || !s.toLowerCase().matches("^[0-9a-f]{24}$")) {
 					System.err.println(MESSAGE_01);
 				} else
 					client_id = s;

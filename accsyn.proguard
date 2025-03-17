@@ -35,9 +35,33 @@
 -forceprocessing
 -printmapping build/3.0-7_19/proguard_mapping.txt
 -verbose
+-dontwarn javafx.**
 -ignorewarnings
 
 
+
+-keep class javafx.** {
+    <fields>;
+    <methods>;
+}
+
+# Keep JavaFX event handlers and bindings
+-keepclassmembers class * extends javafx.event.EventHandler {
+    void handle(javafx.event.Event);
+}
+
+-keepclassmembers class * extends javafx.beans.value.ChangeListener {
+    void changed(javafx.beans.value.ObservableValue,Object,Object);
+}
+
+# Prevent renaming of JavaFX property methods (getters and setters)
+-keepclassmembers class * {
+    javafx.beans.property.** get*();
+    void set*(javafx.beans.property.**);
+}
+
+# Keep JavaFX Application class
+-keep class your.package.name.YourMainAppClass extends javafx.application.Application
 
 -keep class com.accsyn.cli.ASCLIDaemon {
     <methods>;
@@ -103,6 +127,12 @@
     <fields>;
     <methods>;
 }
+
+-keep class com.accsyn.gui.media.ASProxyViewDialog {
+    <methods>;
+}
+
+-keep,allowshrinking class com.accsyn.gui.media.ASProxyViewDialog
 
 # Keep - Applications. Keep all application classes, along with their 'main' methods.
 -keepclasseswithmembers public class * {
