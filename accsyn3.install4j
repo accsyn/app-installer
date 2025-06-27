@@ -36,7 +36,7 @@
           <versionLine x="51" y="89" text="v${compiler:sys.version}" bold="true" />
         </text>
       </splashScreen>
-      <java mainClass="com.accsyn.ASCMD" vmParameters="-Xmx1024m --add-modules javafx.controls,javafx.graphics,javafx.media,javafx.swing -Dsun.java2d.uiScale=1">
+      <java mainClass="com.accsyn.ASCMD" vmParameters="-Xmx1024m  -Dsun.java2d.uiScale=1">
         <classPath>
           <scanDirectory location="lib/noarch" failOnError="false" />
         </classPath>

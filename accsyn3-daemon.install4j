@@ -63,7 +63,7 @@ StandardOutput=null</serviceFile>
     <launcher name="accsyn App" id="372">
       <executable name="${compiler:accsyn_executable}" iconSet="true" stderrFile="log${installer:sys.fileSeparator}accsyn-gui-crash.log.txt" executableMode="gui" changeWorkingDirectory="false" singleInstance="true" />
       <splashScreen bitmapFile="./resource/graphics/accsyn-splashscreen.png" />
-      <java mainClass="com.accsyn.ASCMD" vmParameters="-Xmx1024m --add-modules javafx.controls,javafx.graphics,javafx.media,javafx.swing -Dsun.java2d.uiScale=1" arguments="--gui">
+      <java mainClass="com.accsyn.ASCMD" vmParameters="-Xmx1024m  -Dsun.java2d.uiScale=1" arguments="--gui">
         <classPath>
           <scanDirectory location="lib/noarch" failOnError="false" />
         </classPath>
