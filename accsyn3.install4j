@@ -6,8 +6,8 @@
       <variable name="accsyn_executable" value="accsyn" />
       <variable name="accsyn_version" value="3.0-9_1" />
     </variables>
-    <codeSigning macEnabled="true" macPkcs12File="/Users/henriknorin/Documents/accsyn/dev/encrypted/cert/apple/apple.p12" windowsKeySource="pkcs11" windowsPkcs12File="/Users/henriknorin/Documents/accsyn/dev/encrypted/cert/codesign/codesign.p12" windowsPkcs11Library="/Library/Frameworks/eToken.framework/Versions/A/libeToken.dylib" macNotarize="true" appleId="henrik.norin@highdefinitionrender.com">
-      <windowsPkcs11Identifier issuer="Sectigo Public Code Signing CA EV R36" serial="ffea9316e6d0e321c978809f3b1030b" subject="High Definition Render AB" />
+    <codeSigning macEnabled="true" macPkcs12File="/Users/henriknorin/Documents/accsyn/dev/encrypted/cert/apple/apple.p12" windowsEnabled="true" windowsKeySource="pkcs11" windowsPkcs12File="/Users/henriknorin/Documents/accsyn/dev/encrypted/cert/codesign/codesign.p12" windowsPkcs11Library="/Library/Frameworks/eToken.framework/Versions/A/libeToken.dylib" macNotarize="true" appleId="henrik.norin@highdefinitionrender.com">
+      <windowsPkcs11Identifier issuer="Sectigo Public Code Signing CA R36" serial="e0243f3fc223723d9afdd7fed148824" subject="HDR AB" />
     </codeSigning>
     <jreBundles jdkProviderId="Zulu" release="18/18.0.2">
       <modules>
@@ -36,7 +36,7 @@
           <versionLine x="51" y="89" text="v${compiler:sys.version}" bold="true" />
         </text>
       </splashScreen>
-      <java mainClass="com.accsyn.ASCMD" vmParameters="-Xmx512m --add-modules javafx.controls,javafx.graphics,javafx.media,javafx.swing">
+      <java mainClass="com.accsyn.ASCMD" vmParameters="-Xmx1024m --add-modules javafx.controls,javafx.graphics,javafx.media,javafx.swing -Dsun.java2d.uiScale=1">
         <classPath>
           <scanDirectory location="lib/noarch" failOnError="false" />
         </classPath>

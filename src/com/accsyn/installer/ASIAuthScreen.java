@@ -52,7 +52,7 @@ import com.install4j.api.screens.Console;
 public class ASIAuthScreen extends AbstractInstallerScreen implements ActionListener, ItemListener {
 
 	// GUI
-	static final String LABEL_01 = "Please launch the accsyn server installation from https://accsyn.io/servers/new";
+	static final String LABEL_01 = "Please launch the server installation @ accsyn.io";
 	static final String LABEL_02 = "Enter the code/ID: ";
 	static final String LABEL_03 = "Please enter choice [yes or no]: ";
 	static final String LABEL_04 = "Configuration data exist, ERASE configuration and do a clean installation?\n\n(Choosing No will keep and reuse current accsyn configuration)";
