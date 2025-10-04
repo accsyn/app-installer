@@ -36,7 +36,7 @@
           <versionLine x="51" y="89" text="v${compiler:sys.version}" bold="true" />
         </text>
       </splashScreen>
-      <java mainClass="com.accsyn.ASCMD" vmParameters="-Xmx1024m  -Dsun.java2d.uiScale=1">
+      <java mainClass="com.accsyn.ASCMD" vmParameters="-Xmx1024m">
         <classPath>
           <scanDirectory location="lib/noarch" failOnError="false" />
         </classPath>
@@ -55,7 +55,7 @@
     <launcher name="accsyn CLI" id="681" macBundleBinary="accsyn">
       <executable name="${compiler:accsyn_executable}" iconSet="true" redirectStderr="false" stderrFile="${installer:sys.tempDir}${installer:sys.fileSeparator}accsyn-stderr.log.txt" stderrMode="append" stdoutFile="${installer:sys.tempDir}${installer:sys.fileSeparator}accsyn-stdout.log.txt" executableMode="console" changeWorkingDirectory="false" />
       <splashScreen bitmapFile="./resource/graphics/accsyn-splashscreen.png" />
-      <java mainClass="com.accsyn.ASCMD" vmParameters="-Xmx512m">
+      <java mainClass="com.accsyn.ASCMD" vmParameters="-Xmx512m -XX:MaxDirectMemorySize=512m">
         <classPath>
           <scanDirectory location="lib/noarch" failOnError="false" />
         </classPath>
