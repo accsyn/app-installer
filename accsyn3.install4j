@@ -5,6 +5,7 @@
     <variables>
       <variable name="accsyn_executable" value="accsyn" />
       <variable name="accsyn_version" value="3.0-9_1" />
+      <variable name="accsyn_platform_vm_arguments" />
     </variables>
     <codeSigning macEnabled="true" macPkcs12File="/Users/henriknorin/Documents/accsyn/dev/encrypted/cert/apple/apple.p12" windowsEnabled="true" windowsKeySource="pkcs11" windowsPkcs12File="/Users/henriknorin/Documents/accsyn/dev/encrypted/cert/codesign/codesign.p12" windowsPkcs11Library="/Library/Frameworks/eToken.framework/Versions/A/libeToken.dylib" macNotarize="true" appleId="henrik.norin@highdefinitionrender.com">
       <windowsPkcs11Identifier issuer="Sectigo Public Code Signing CA R36" serial="e0243f3fc223723d9afdd7fed148824" subject="HDR AB" />
@@ -36,7 +37,7 @@
           <versionLine x="51" y="89" text="v${compiler:sys.version}" bold="true" />
         </text>
       </splashScreen>
-      <java mainClass="com.accsyn.ASCMD" vmParameters="-Xmx1024m">
+      <java mainClass="com.accsyn.ASCMD" vmParameters="-Xmx1024m ${compiler:accsyn_platform_vm_arguments}">
         <classPath>
           <scanDirectory location="lib/noarch" failOnError="false" />
         </classPath>
@@ -55,7 +56,7 @@
     <launcher name="accsyn CLI" id="681" macBundleBinary="accsyn">
       <executable name="${compiler:accsyn_executable}" iconSet="true" redirectStderr="false" stderrFile="${installer:sys.tempDir}${installer:sys.fileSeparator}accsyn-stderr.log.txt" stderrMode="append" stdoutFile="${installer:sys.tempDir}${installer:sys.fileSeparator}accsyn-stdout.log.txt" executableMode="console" changeWorkingDirectory="false" />
       <splashScreen bitmapFile="./resource/graphics/accsyn-splashscreen.png" />
-      <java mainClass="com.accsyn.ASCMD" vmParameters="-Xmx512m -XX:MaxDirectMemorySize=512m">
+      <java mainClass="com.accsyn.ASCMD" vmParameters="-Xmx512m -XX:MaxDirectMemorySize=512m ${compiler:accsyn_platform_vm_arguments}">
         <classPath>
           <scanDirectory location="lib/noarch" failOnError="false" />
         </classPath>
@@ -898,7 +899,11 @@ file.getParent() != null || (file.getName().endsWith(".app") &amp;&amp; director
     </styles>
   </installerGui>
   <mediaSets>
-    <windows name="Windows 64bit" id="57" mediaFileName="accsyn-windows" installDir="Accsyn" postProcessor="&quot;C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\signtool.exe&quot; sign /a /tr http://rfc3161timestamp.globalsign.com/advanced /td SHA256 $EXECUTABLE" architecture="64" />
+    <windows name="Windows 64bit" id="57" mediaFileName="accsyn-windows" installDir="Accsyn" postProcessor="&quot;C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\signtool.exe&quot; sign /a /tr http://rfc3161timestamp.globalsign.com/advanced /td SHA256 $EXECUTABLE" architecture="64">
+      <variables>
+        <variable name="accsyn_platform_vm_arguments" value="-Dsun.java2d.uiScale=1.0" />
+      </variables>
+    </windows>
     <macosArchive name="Mac OS X" id="678" mediaFileName="accsyn-mac" architecture="universal" launcherId="56">
       <variables>
         <variable name="accsyn_executable" value="accsynApp" />

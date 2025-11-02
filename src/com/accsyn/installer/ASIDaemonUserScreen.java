@@ -48,7 +48,7 @@ public class ASIDaemonUserScreen extends AbstractInstallerScreen implements Acti
 	static final String LABEL_11 = "Password:";
 	
 	static final String NOTE_01 = "User will have to have read and write access to the storage handled by accsyn (root share), and system users cannot be configured within accsyn unless this user has "+(ASICommon.isWindows()?"administrative":"root")+" permission to switch user (unix: sudo)";
-	static final String NOTE_02 = "All file operations will run as this user, both file transfers and file listings with associated file operations (mkdir, rename, move, delete)";
+	static final String NOTE_02 = "All file transfers, operations and hooks will run as this user, this includes file listings with associated file operations (mkdir, rename, move, delete)";
 	static final String NOTE_03 = "You can also configure a global, and per user, system username.";
 	static final String NOTE_04 = "Make sure user have been granted the 'Log on as a service' right (Logon as administrator, goto Administrative Tools>Local Security Policy>Local Policy>User Rights Assignment and add the user to 'Log on as a service' group).";
 	static final String NOTE_05 = "Leave empty and default umask will apply.";

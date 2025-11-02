@@ -4,8 +4,9 @@
   <application name="accsyn Daemon" applicationId="8676-3927-8865-0640" mediaDir="./build/${compiler:accsyn_version}" shortName="accsyn" publisher="HDR AB" publisherWeb="https://accsyn.com" version="${compiler:accsyn_version}" allPathsRelative="true" autoSave="true" macVolumeId="ffab8b2ca215ea92" javaMinVersion="1.7" javaMaxVersion="30">
     <variables>
       <variable name="accsyn_executable" value="accsynApp" />
-      <variable name="accsyn_version" value="3.0-26_22" />
+      <variable name="accsyn_version" value="3.4-5_29" />
       <variable name="sys.ext.updatesFileName" value="updates_daemon.xml" />
+      <variable name="accsyn_platform_vm_arguments" />
     </variables>
     <codeSigning macEnabled="true" macPkcs12File="/Users/henriknorin/Documents/accsyn/dev/encrypted/cert/apple/apple.p12" windowsEnabled="true" windowsKeySource="pkcs11" windowsPkcs12File="/Users/henriknorin/Documents/accsyn/dev/encrypted/cert/codesign/codesign.p12" windowsPkcs11Library="/Library/Frameworks/eToken.framework/Versions/A/libeToken.dylib" macNotarize="true" appleId="henrik.norin@highdefinitionrender.com">
       <windowsPkcs11Identifier issuer="Sectigo Public Code Signing CA R36" serial="e0243f3fc223723d9afdd7fed148824" subject="HDR AB" />
@@ -47,7 +48,7 @@ StandardOutput=null</serviceFile>
     <launcher name="accsyn CLI" id="160" excludeFromMenu="true">
       <executable name="accsyn" iconSet="true" redirectStderr="false" stderrFile="log${installer:sys.fileSeparator}accsyn-cli-crash.log" stderrMode="append" executableMode="console" changeWorkingDirectory="false" />
       <splashScreen bitmapFile="./resource/graphics/accsyn-splashscreen.png" />
-      <java mainClass="com.accsyn.ASCMD" vmParameters="-Xmx3096m -XX:MaxDirectMemorySize=512m">
+      <java mainClass="com.accsyn.ASCMD" vmParameters="-Xmx3096m -XX:MaxDirectMemorySize=512m ${compiler:accsyn_platform_vm_arguments}">
         <classPath>
           <scanDirectory location="lib/noarch" failOnError="false" />
         </classPath>
@@ -63,7 +64,7 @@ StandardOutput=null</serviceFile>
     <launcher name="accsyn App" id="372">
       <executable name="${compiler:accsyn_executable}" iconSet="true" stderrFile="log${installer:sys.fileSeparator}accsyn-gui-crash.log.txt" executableMode="gui" changeWorkingDirectory="false" singleInstance="true" />
       <splashScreen bitmapFile="./resource/graphics/accsyn-splashscreen.png" />
-      <java mainClass="com.accsyn.ASCMD" vmParameters="-Xmx1024m" arguments="--gui">
+      <java mainClass="com.accsyn.ASCMD" vmParameters="-Xmx1024m ${compiler:accsyn_platform_vm_arguments}" arguments="--gui">
         <classPath>
           <scanDirectory location="lib/noarch" failOnError="false" />
         </classPath>
@@ -285,100 +286,6 @@ return console.askOkCancel(message, true);
  
  /The Accsyn team</property>
                 </serializedBean>
-              </formComponent>
-            </formComponents>
-          </screen>
-          <screen name="Configure" id="388" beanClass="com.install4j.runtime.beans.screens.FormScreen" enabled="false">
-            <serializedBean>
-              <property name="subTitle" type="string">Configure the Accsyn background service/daemon</property>
-              <property name="title" type="string">Setup service</property>
-            </serializedBean>
-            <condition>!context.isUpdateInstallation()</condition>
-            <formComponents>
-              <formComponent name="Username" id="455" beanClass="com.install4j.runtime.beans.formcomponents.TextfieldComponent">
-                <serializedBean>
-                  <property name="checkIfEmpty" type="boolean" value="true" />
-                  <property name="initialText" type="string">${installer:accsynUsername}</property>
-                  <property name="labelText" type="string">Enter server login(E-mail):</property>
-                  <property name="variableName" type="string">accsynUsername</property>
-                </serializedBean>
-              </formComponent>
-              <formComponent name="API_KEY" id="456" beanClass="com.install4j.runtime.beans.formcomponents.PasswordComponent">
-                <serializedBean>
-                  <property name="checkIfEmpty" type="boolean" value="true" />
-                  <property name="initialText" type="string">${installer:accsynAPIKey}</property>
-                  <property name="labelText" type="string">Enter API key/secret:</property>
-                  <property name="variableName" type="string">accsynAPIKey</property>
-                </serializedBean>
-              </formComponent>
-              <formComponent name="Org" id="457" beanClass="com.install4j.runtime.beans.formcomponents.TextfieldComponent">
-                <serializedBean>
-                  <property name="checkIfEmpty" type="boolean" value="true" />
-                  <property name="initialText" type="string">${installer:accsynOrganization}</property>
-                  <property name="labelText" type="string">Enter your Accsyn organization:</property>
-                  <property name="variableName" type="string">accsynOrganization</property>
-                </serializedBean>
-              </formComponent>
-              <formComponent name="Site" id="536" beanClass="com.install4j.runtime.beans.formcomponents.TextfieldComponent">
-                <serializedBean>
-                  <property name="initialText" type="string">${installer:accsynOrganization}${installer:accsynSite}</property>
-                  <property name="labelText" type="string">(Optional) Enter Accsyn site:</property>
-                  <property name="variableName" type="string">accsynSite</property>
-                </serializedBean>
-              </formComponent>
-              <formComponent name="Do install service" id="392" beanClass="com.install4j.runtime.beans.formcomponents.CheckboxComponent">
-                <serializedBean>
-                  <property name="checkboxText" type="string">Install service</property>
-                  <property name="initiallySelected" type="boolean" value="true" />
-                  <property name="variableName" type="string">accsyn_daemon_do_install</property>
-                </serializedBean>
-              </formComponent>
-              <formComponent name="Run service as user" id="396" beanClass="com.install4j.runtime.beans.formcomponents.CheckboxComponent">
-                <serializedBean>
-                  <property name="checkboxText" type="string">Run service as user</property>
-                  <property name="variableName" type="string">accsynServiceAsUser</property>
-                </serializedBean>
-              </formComponent>
-              <formComponent name="Debug" id="521" beanClass="com.install4j.runtime.beans.formcomponents.LabelComponent" enabled="false">
-                <serializedBean>
-                  <property name="labelText" type="string">accsynUsername=${installer:accsynUsername}</property>
-                </serializedBean>
-              </formComponent>
-            </formComponents>
-          </screen>
-          <screen name="Input daemon user" id="306" beanClass="com.install4j.runtime.beans.screens.FormScreen" enabled="false">
-            <serializedBean>
-              <property name="subTitle" type="string">Username and password to run service as</property>
-              <property name="title" type="string">Accsyn service login</property>
-            </serializedBean>
-            <condition>context.getBooleanVariable("accsynServiceAsUser") == true</condition>
-            <formComponents>
-              <formComponent id="368" beanClass="com.install4j.runtime.beans.formcomponents.TextfieldComponent">
-                <serializedBean>
-                  <property name="checkIfEmpty" type="boolean" value="true" />
-                  <property name="enterGoesToNextScreen" type="boolean" value="true" />
-                  <property name="helpText" type="string">Enter the username that service should run as.</property>
-                  <property name="initialText" type="string">user@domain.com</property>
-                  <property name="inputVerifier">
-                    <object class="com.install4j.api.beans.ScriptProperty">
-                      <property name="value" type="string" />
-                    </object>
-                  </property>
-                  <property name="labelText" type="string">Username:${installer:accsynServiceUser}</property>
-                  <property name="requestFocus" type="boolean" value="true" />
-                  <property name="variableName" type="string">accsynUsername</property>
-                </serializedBean>
-                <visibilityScript>context.getBooleanVariable("accsynServiceAsUser") == true</visibilityScript>
-              </formComponent>
-              <formComponent id="369" beanClass="com.install4j.runtime.beans.formcomponents.PasswordComponent">
-                <serializedBean>
-                  <property name="checkIfEmpty" type="boolean" value="true" />
-                  <property name="enterGoesToNextScreen" type="boolean" value="true" />
-                  <property name="helpText" type="string">Enter the password for user.</property>
-                  <property name="labelText" type="string">Password:</property>
-                  <property name="variableName" type="string">accsynServicePWD</property>
-                </serializedBean>
-                <visibilityScript>context.getBooleanVariable("accsynServiceAsUser") == true</visibilityScript>
               </formComponent>
             </formComponents>
           </screen>
@@ -1399,6 +1306,7 @@ file.getParent() != null || (file.getName().endsWith(".app") &amp;&amp; director
       </exclude>
       <variables>
         <variable name="filmub_daemon_executable" value="AccsynService" />
+        <variable name="accsyn_platform_vm_arguments" value="-Dsun.java2d.uiScale=1.0" />
       </variables>
       <jreBundle includedJre="windows-amd64-1.8.0_202" />
     </windows>
@@ -1411,7 +1319,7 @@ file.getParent() != null || (file.getName().endsWith(".app") &amp;&amp; director
     </unixInstaller>
   </mediaSets>
   <buildIds buildAll="false">
-    <mediaSet refId="57" />
+    <mediaSet refId="315" />
   </buildIds>
   <buildOptions verbose="true" disableSigning="true" disableNotarization="true" />
 </install4j>

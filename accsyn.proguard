@@ -31,6 +31,12 @@
 -libraryjars lib/noarch/okio-3.5.0.jar
 -libraryjars lib/noarch/okio-jvm-3.5.0.jar
 -libraryjars lib/noarch/snakeyaml-2.2.jar
+-libraryjars lib/noarch/slf4j-api-2.0.17.jar
+-libraryjars lib/noarch/oshi-core-6.8.3.jar
+-libraryjars lib/noarch/jna-platform-5.17.0.jar
+-libraryjars lib/noarch/jna-5.17.0.jar
+
+
 
 -forceprocessing
 -printmapping build/3.0-7_19/proguard_mapping.txt

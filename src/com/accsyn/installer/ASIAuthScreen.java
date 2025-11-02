@@ -57,7 +57,7 @@ public class ASIAuthScreen extends AbstractInstallerScreen implements ActionList
 	static final String LABEL_03 = "Please enter choice [yes or no]: ";
 	static final String LABEL_04 = "Configuration data exist, ERASE configuration and do a clean installation?\n\n(Choosing No will keep and reuse current accsyn configuration)";
 
-	static final String MESSAGE_01 = "Please enter the server ID as presented in the web application - 24 digits hexadecimal number!";
+	static final String MESSAGE_01 = "Please enter the server ID as presented on accsyn.io - 24 digits hexadecimal number (case sensitive)";
 	static final String MESSAGE_02 = "A server error occured during authentication, please try again later or contact accsyn support: support@accsyn.com";
 	static final String MESSAGE_03 = "A server error occurred when trying to connect to accsyn, please try again later or contact accsyn support: support@accsyn.com";
 	static final String MESSAGE_04 = "Please enter 'yes' or 'no'!";
