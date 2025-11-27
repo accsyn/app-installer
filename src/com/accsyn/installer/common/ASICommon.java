@@ -55,6 +55,8 @@ public class ASICommon {
 	public static final int REST_POST = 2;
 	public static final int REST_DELETE = 3;
 	
+	public static final String MAC_DAEMON_PLIST = "/Library/LaunchDaemons/com.accsyn.daemon.plist";
+	
 	public ASICommon() {
 		// TODO Auto-generated constructor stub
 	}
@@ -815,7 +817,7 @@ public class ASICommon {
 					warning("detectDaemonUser; Could not query Windows service! Details: "+output);
 				}
 			} else if (isMac()) {
-				String p = "/Library/LaunchDaemons/com.accsyn.daemon.plist";
+				String p = MAC_DAEMON_PLIST;
 				File f = new File(p);
 				if (f.exists() && f.canRead()) {
 					String contents = readFile(p);
@@ -858,7 +860,7 @@ public class ASICommon {
 			if (isWindows()) {
 				return null;
 			} else if (isMac()) {
-				String p = "/Library/LaunchDaemons/com.accsyn.daemon.plist";
+				String p = MAC_DAEMON_PLIST;
 				File f = new File(p);
 				if (f.exists() && f.canRead()) {
 					String contents = readFile(p);
@@ -866,7 +868,7 @@ public class ASICommon {
 					if (0<idx) {
 						int idx_value = contents.indexOf("<integer>", idx);
 						if (0<idx_value) {
-							return contents.substring(idx_value+8, contents.indexOf("</integer>", idx_value));
+							return contents.substring(idx_value+9, contents.indexOf("</integer>", idx_value));
 						} else
 							warning("detectDaemonUmask; No <integer> after Umask entry! Output: "+contents);
 					} else
@@ -925,12 +927,12 @@ public class ASICommon {
 					return false;
 				}
 			} else if (isMac()) {
-				String p = "/Library/LaunchDaemons/com.accsyn.daemon.plist";
+				String p = MAC_DAEMON_PLIST;
 				info("writeDaemonUser; Updating Mac OS launchd with username/umask @ '"+p+"'");
 				// install4j overwrites plist, append user
 				
 				File f = new File(p);
-				if (f.exists() && f.canRead() && f.canWrite()) {
+				if (f.exists() && f.canRead()/* && f.canWrite()*/) {
 					String result = "";
 					String[] parts = readFile(p).split("\n");
 					for (int idx = 0; idx < parts.length; idx++) {

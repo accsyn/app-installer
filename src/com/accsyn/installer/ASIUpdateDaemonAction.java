@@ -23,7 +23,7 @@ public class ASIUpdateDaemonAction extends AbstractInstallOrUninstallAction {
 		String daemon_password =  parseVar(context.getVariable("accsyn_daemon_password"));
 		String daemon_umask = parseVar(context.getVariable("accsyn_daemon_umask"));
 		if ((daemon_user != null && 0<daemon_user.length()) || (daemon_umask != null && 0<daemon_umask.length())) {
-			ASICommon.info("Configuring daemon with user: "+daemon_user+", password: *, umask: "+daemon_umask+ " (OS: "+System.getProperty("os.name")+", invoking user: "+System.getProperty("user.name")+")");
+			ASICommon.info("Configuring daemon with user: "+daemon_user+" and/or umask: "+daemon_umask+ " (OS: "+System.getProperty("os.name")+", invoking user: "+System.getProperty("user.name")+")");
 			return ASICommon.updateDaemon(daemon_user, daemon_password, daemon_umask);
 		} else {
 			ASICommon.info("Not updating daemon config - no username or umask defined!");

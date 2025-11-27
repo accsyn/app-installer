@@ -18,6 +18,7 @@ import java.util.Date;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -52,11 +53,12 @@ import com.install4j.api.screens.Console;
 public class ASIAuthScreen extends AbstractInstallerScreen implements ActionListener, ItemListener {
 
 	// GUI
-	static final String LABEL_01 = "Please launch the server installation @ accsyn.io";
-	static final String LABEL_02 = "Enter the code/ID: ";
+	static final String LABEL_01 = "Please launch the server installation @ accsyn.io and enter the code presented to you:";
+	static final String LABEL_02 = "Enter the code/ID (or type 'skip' to just install): ";
 	static final String LABEL_03 = "Please enter choice [yes or no]: ";
 	static final String LABEL_04 = "Configuration data exist, ERASE configuration and do a clean installation?\n\n(Choosing No will keep and reuse current accsyn configuration)";
-
+	static final String LABEL_05 = "Skip and just install the daemon - I have local server config to be restore later.";
+	
 	static final String MESSAGE_01 = "Please enter the server ID as presented on accsyn.io - 24 digits hexadecimal number (case sensitive)";
 	static final String MESSAGE_02 = "A server error occured during authentication, please try again later or contact accsyn support: support@accsyn.com";
 	static final String MESSAGE_03 = "A server error occurred when trying to connect to accsyn, please try again later or contact accsyn support: support@accsyn.com";
@@ -68,6 +70,7 @@ public class ASIAuthScreen extends AbstractInstallerScreen implements ActionList
 	private int mode = MODE_SKIP;
 
 	private JTextField tf_id;
+	private JCheckBox cb_skip;
 
 	// GUI setup ////////////////////////////////////////////////////////////////
 
@@ -83,28 +86,8 @@ public class ASIAuthScreen extends AbstractInstallerScreen implements ActionList
 			panel.add(new JLabel("<html><strong>!!! DEVELOPMENT MODE !!!</strong></html>"), c);
 		if (ASICommon.getRootPathEnv() != null)
 			panel.add(new JLabel("<html>!!! Root: "+ASICommon.getRootPathEnv()+"!!!</html>"), c);
-		panel.add(new JLabel(""), c);
-		/*
-		 * panel.add(new JLabel("<html>" + "Continue your domain setup or " +
-		 * "logon as admin and go to your AccSyn and go ADMIN>SERVERS>Install Server." +
-		 * "</html>"), c);
-		 */
-		panel.add(new JLabel(""), c);
-
-		c.weighty = 50;
-		panel.add(new JLabel(), c);
-
-		c.gridwidth = 1;
-		c.weighty = 1;
-		c.weightx = 30;
-		panel.add(new JLabel(), c);
-		c.gridwidth = 1;
-		c.weightx = 40;
-		panel.add(new JLabel(LABEL_02), c);
-		c.gridwidth = GridBagConstraints.REMAINDER;
-		c.weightx = 30;
-		panel.add(new JLabel(), c);
-
+		
+		c.insets.top = 40;
 		c.gridwidth = 1;
 		c.weightx = 30;
 		panel.add(new JLabel(), c);
@@ -156,7 +139,12 @@ public class ASIAuthScreen extends AbstractInstallerScreen implements ActionList
 		c.gridwidth = GridBagConstraints.REMAINDER;
 		c.weightx = 30;
 		panel.add(new JLabel(), c);
-
+		
+		c.gridheight = GridBagConstraints.REMAINDER;
+		c.insets.top = 60;
+		panel.add(cb_skip = new JCheckBox(LABEL_05), c);
+		cb_skip.addActionListener(this);
+		
 		return panel;
 	}
 
@@ -196,7 +184,7 @@ public class ASIAuthScreen extends AbstractInstallerScreen implements ActionList
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-
+		tf_id.setEnabled(!cb_skip.isSelected());
 		updateAuthScreen();
 	}
 
@@ -259,36 +247,41 @@ public class ASIAuthScreen extends AbstractInstallerScreen implements ActionList
 	public boolean next() {
 		ASICommon.info("next() mode:" + mode);
 		InstallerContext ic = getInstallerContext();
-		String client_id = tf_id.getText().trim();
-		if (client_id.length() == 0 || !client_id.toLowerCase().matches("^[0-9a-f]{24}$")) {
-			JOptionPane.showMessageDialog(null, MESSAGE_01, "Authentication", JOptionPane.WARNING_MESSAGE);
-			return false;
-		} else {
-			// Check with registry
-			JSONObject data = new JSONObject();
-			data.put("client", client_id);
-			data.put("hostname", ASICommon.getHostname());
-			try {
-				JSONObject response = ASICommon.rest(ASICommon.REST_PUT, "client/check", data);
-				if (response.containsKey("message")) {
-					JOptionPane.showMessageDialog(null, response.get("message"), "Authentication", JOptionPane.WARNING_MESSAGE);
-					return false;
-				} else if (response.containsKey("exception")) {
-					JOptionPane.showMessageDialog(null, MESSAGE_02, "Authentication", JOptionPane.ERROR_MESSAGE);
-					return false;
-				} else {
-					JSONObject result = (JSONObject) response.get("result");
-					// Store data so we can write it later
-					ic.setVariable("accsyn_workspace", result.get("workspace_code"));
-					ic.setVariable("accsyn_api_user", result.get("user_code"));
-					ic.setVariable("accsyn_client_id", client_id + "");
-					ASICommon.info("Successfully authenticated accsyn server. Installation can proceed.");
-				}
-			} catch (Exception e) {
-				ASICommon.error(e);
-				JOptionPane.showMessageDialog(null, MESSAGE_03, "Authentication", JOptionPane.ERROR_MESSAGE);
+		if (!cb_skip.isSelected()) {
+			String client_id = tf_id.getText().trim();
+			if (client_id.length() == 0 || !client_id.toLowerCase().matches("^[0-9a-f]{24}$")) {
+				JOptionPane.showMessageDialog(null, MESSAGE_01, "Authentication", JOptionPane.WARNING_MESSAGE);
 				return false;
+			} else {
+				// Check with registry
+				JSONObject data = new JSONObject();
+				data.put("client", client_id);
+				data.put("hostname", ASICommon.getHostname());
+				try {
+					JSONObject response = ASICommon.rest(ASICommon.REST_PUT, "client/check", data);
+					if (response.containsKey("message")) {
+						JOptionPane.showMessageDialog(null, response.get("message"), "Authentication", JOptionPane.WARNING_MESSAGE);
+						return false;
+					} else if (response.containsKey("exception")) {
+						JOptionPane.showMessageDialog(null, MESSAGE_02, "Authentication", JOptionPane.ERROR_MESSAGE);
+						return false;
+					} else {
+						JSONObject result = (JSONObject) response.get("result");
+						// Store data so we can write it later
+						ic.setVariable("accsyn_workspace", result.get("workspace_code"));
+						ic.setVariable("accsyn_api_user", result.get("user_code"));
+						ic.setVariable("accsyn_client_id", client_id + "");
+						ASICommon.info("Successfully authenticated accsyn server. Installation can proceed.");
+					}
+				} catch (Exception e) {
+					ASICommon.error(e);
+					JOptionPane.showMessageDialog(null, MESSAGE_03, "Authentication", JOptionPane.ERROR_MESSAGE);
+					return false;
+				}
 			}
+		} else {
+			ic.setVariable("accsyn_client_id", "null");
+			ASICommon.info("Skipped server authentication. Installation can proceed.");
 		}
 		return super.next();
 	}
@@ -332,7 +325,13 @@ public class ASIAuthScreen extends AbstractInstallerScreen implements ActionList
 			while (client_id == null) {
 				console.print(LABEL_02);
 				String s = console.readLine();
-				if (s == null || !s.toLowerCase().matches("^[0-9a-f]{24}$")) {
+				if (s == null) {
+					System.err.println(MESSAGE_01);
+				} else if (s.toLowerCase().equals("skip")) {
+					ic.setVariable("accsyn_client_id", "null");
+					ASICommon.info("Skipped server authentication. Installation can proceed.");
+					return true;
+				} else if (!s.toLowerCase().matches("^[0-9a-f]{24}$")) {
 					System.err.println(MESSAGE_01);
 				} else
 					client_id = s;

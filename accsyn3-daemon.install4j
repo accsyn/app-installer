@@ -4,11 +4,11 @@
   <application name="accsyn Daemon" applicationId="8676-3927-8865-0640" mediaDir="./build/${compiler:accsyn_version}" shortName="accsyn" publisher="HDR AB" publisherWeb="https://accsyn.com" version="${compiler:accsyn_version}" allPathsRelative="true" autoSave="true" macVolumeId="ffab8b2ca215ea92" javaMinVersion="1.7" javaMaxVersion="30">
     <variables>
       <variable name="accsyn_executable" value="accsynApp" />
-      <variable name="accsyn_version" value="3.4-5_29" />
+      <variable name="accsyn_version" value="3.5-0_6" />
       <variable name="sys.ext.updatesFileName" value="updates_daemon.xml" />
       <variable name="accsyn_platform_vm_arguments" />
     </variables>
-    <codeSigning macEnabled="true" macPkcs12File="/Users/henriknorin/Documents/accsyn/dev/encrypted/cert/apple/apple.p12" windowsEnabled="true" windowsKeySource="pkcs11" windowsPkcs12File="/Users/henriknorin/Documents/accsyn/dev/encrypted/cert/codesign/codesign.p12" windowsPkcs11Library="/Library/Frameworks/eToken.framework/Versions/A/libeToken.dylib" macNotarize="true" appleId="henrik.norin@highdefinitionrender.com">
+    <codeSigning macEnabled="true" macPkcs12File="../../encrypted/cert/apple/apple.p12" windowsEnabled="true" windowsKeySource="pkcs11" windowsPkcs12File="../../encrypted/cert/codesign/codesign.p12" windowsPkcs11Library="/Library/Frameworks/eToken.framework/Versions/A/libeToken.dylib" macNotarize="true" appleId="henrik.norin@highdefinitionrender.com">
       <windowsPkcs11Identifier issuer="Sectigo Public Code Signing CA R36" serial="e0243f3fc223723d9afdd7fed148824" subject="HDR AB" />
     </codeSigning>
     <jreBundles jdkProviderId="Zulu" release="18/18.0.2" />
@@ -45,22 +45,6 @@ StandardOutput=null</serviceFile>
         <file path="./resource/graphics/accsyn_daemon_icon_64.png" />
       </iconImageFiles>
     </launcher>
-    <launcher name="accsyn CLI" id="160" excludeFromMenu="true">
-      <executable name="accsyn" iconSet="true" redirectStderr="false" stderrFile="log${installer:sys.fileSeparator}accsyn-cli-crash.log" stderrMode="append" executableMode="console" changeWorkingDirectory="false" />
-      <splashScreen bitmapFile="./resource/graphics/accsyn-splashscreen.png" />
-      <java mainClass="com.accsyn.ASCMD" vmParameters="-Xmx3096m -XX:MaxDirectMemorySize=512m ${compiler:accsyn_platform_vm_arguments}">
-        <classPath>
-          <scanDirectory location="lib/noarch" failOnError="false" />
-        </classPath>
-      </java>
-      <iconImageFiles>
-        <file path="./resource/graphics/accsyn_console_icon_32.png" />
-        <file path="./resource/graphics/accsyn_console_icon_48.png" />
-        <file path="./resource/graphics/accsyn_console_icon_64.png" />
-        <file path="./resource/graphics/accsyn_console_icon_128.png" />
-        <file path="./resource/graphics/accsyn_console_icon_512.png" />
-      </iconImageFiles>
-    </launcher>
     <launcher name="accsyn App" id="372">
       <executable name="${compiler:accsyn_executable}" iconSet="true" stderrFile="log${installer:sys.fileSeparator}accsyn-gui-crash.log.txt" executableMode="gui" changeWorkingDirectory="false" singleInstance="true" />
       <splashScreen bitmapFile="./resource/graphics/accsyn-splashscreen.png" />
@@ -80,6 +64,22 @@ StandardOutput=null</serviceFile>
       <macStaticAssociations>
         <urlHandler scheme="accsyn" />
       </macStaticAssociations>
+    </launcher>
+    <launcher name="accsyn CLI" id="160" excludeFromMenu="true">
+      <executable name="accsyn" iconSet="true" redirectStderr="false" stderrFile="log${installer:sys.fileSeparator}accsyn-cli-crash.log" stderrMode="append" executableMode="console" changeWorkingDirectory="false" />
+      <splashScreen bitmapFile="./resource/graphics/accsyn-splashscreen.png" />
+      <java mainClass="com.accsyn.ASCMD" vmParameters="-Xmx3096m -XX:MaxDirectMemorySize=512m ${compiler:accsyn_platform_vm_arguments}">
+        <classPath>
+          <scanDirectory location="lib/noarch" failOnError="false" />
+        </classPath>
+      </java>
+      <iconImageFiles>
+        <file path="./resource/graphics/accsyn_console_icon_32.png" />
+        <file path="./resource/graphics/accsyn_console_icon_48.png" />
+        <file path="./resource/graphics/accsyn_console_icon_64.png" />
+        <file path="./resource/graphics/accsyn_console_icon_128.png" />
+        <file path="./resource/graphics/accsyn_console_icon_512.png" />
+      </iconImageFiles>
     </launcher>
   </launchers>
   <installerGui autoUpdateDescriptorUrl="https://accsyn.com/app/v1/updates_daemon.xml">
@@ -478,7 +478,7 @@ return console.askOkCancel(message, true);
                 </serializedBean>
               </action>
               <action id="1448" beanClass="com.accsyn.installer.ASIUpdateDaemonAction" actionElevationType="elevated" rollbackBarrierExitCode="0">
-                <condition>context.getBooleanVariable("accsyn_daemon_do_install") == true &amp;&amp; !context.isUpdateInstallation()</condition>
+                <condition>context.getBooleanVariable("accsyn_daemon_do_install") == true &amp;&amp; (!context.isUpdateInstallation() || System.getProperty("os.name").toLowerCase().indexOf("windows")==-1)</condition>
               </action>
               <action id="1727" beanClass="com.install4j.runtime.beans.actions.control.SetMessageAction" actionElevationType="none" rollbackBarrierExitCode="0">
                 <serializedBean>
@@ -631,6 +631,12 @@ return console.askOkCancel(message, true);
                   <property name="write" type="boolean" value="true" />
                 </serializedBean>
                 <condition>-1&lt;System.getProperty("os.name").toLowerCase().indexOf("windows")&amp;&amp;!context.isUpdateInstallation()&amp;&amp;context.getBooleanVariable("accsyn_daemon_do_install")&amp;&amp;(String)context.getVariable("accsyn_daemon_user")!=null&amp;&amp;0&lt;((String)context.getVariable("accsyn_daemon_user")).length()</condition>
+              </action>
+              <action id="1733" beanClass="com.install4j.runtime.beans.actions.desktop.UrlHandlerAction" actionElevationType="elevated" rollbackBarrierExitCode="0">
+                <serializedBean>
+                  <property name="launcherId" type="string">372</property>
+                  <property name="scheme" type="string">accsyn</property>
+                </serializedBean>
               </action>
             </actions>
             <formComponents>

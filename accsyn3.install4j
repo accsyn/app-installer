@@ -4,7 +4,7 @@
   <application name="accsyn" applicationId="0463-6243-7202-1955" mediaDir="./build/${compiler:accsyn_version}/" shortName="accsyn" publisher="HDR AB" publisherWeb="https://accsyn.com" version="${compiler:accsyn_version}" allPathsRelative="true" autoSave="true" macVolumeId="3ce254201a13dfaa" javaMinVersion="1.7" javaMaxVersion="30">
     <variables>
       <variable name="accsyn_executable" value="accsyn" />
-      <variable name="accsyn_version" value="3.0-9_1" />
+      <variable name="accsyn_version" value="3.5-0_5" />
       <variable name="accsyn_platform_vm_arguments" />
     </variables>
     <codeSigning macEnabled="true" macPkcs12File="/Users/henriknorin/Documents/accsyn/dev/encrypted/cert/apple/apple.p12" windowsEnabled="true" windowsKeySource="pkcs11" windowsPkcs12File="/Users/henriknorin/Documents/accsyn/dev/encrypted/cert/codesign/codesign.p12" windowsPkcs11Library="/Library/Frameworks/eToken.framework/Versions/A/libeToken.dylib" macNotarize="true" appleId="henrik.norin@highdefinitionrender.com">
@@ -30,7 +30,7 @@
     </entries>
   </files>
   <launchers>
-    <launcher name="accsyn App" id="56" macBundleBinary="accsyn">
+    <launcher name="accsyn App" id="56" macBundleBinary="accsyn" useCustomMacosExecutableName="true" customMacosExecutableName="Accsyn">
       <executable name="${compiler:accsyn_executable} App" iconSet="true" stderrFile="${installer:sys.tempDir}${installer:sys.fileSeparator}.accsyn${installer:sys.fileSeparator}accsyn-stderr.log.txt" stderrMode="append" stdoutFile="${installer:sys.tempDir}${installer:sys.fileSeparator}accsyn-stdout.log.txt" executableMode="gui" changeWorkingDirectory="false" singleInstance="true" />
       <splashScreen width="280" height="110" bitmapFile="./resource/graphics/accsyn-splashscreen.png" textOverlay="true">
         <text>
@@ -923,9 +923,7 @@ file.getParent() != null || (file.getName().endsWith(".app") &amp;&amp; director
     </linuxDeb>
   </mediaSets>
   <buildIds buildAll="false">
-    <mediaSet refId="57" />
     <mediaSet refId="678" />
-    <mediaSet refId="62" />
   </buildIds>
-  <buildOptions verbose="true" />
+  <buildOptions verbose="true" disableSigning="true" />
 </install4j>
