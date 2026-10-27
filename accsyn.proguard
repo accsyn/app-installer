@@ -1,5 +1,5 @@
--injars lib/noarch_raw/as.jar
--outjars lib/noarch/as.jar
+-injars lib/noarch_raw/asc.jar
+-outjars lib/noarch/asc.jar
 
 -libraryjars '/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home/lib/rt.jar'
 -libraryjars '/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home/lib/jce.jar'
@@ -35,11 +35,12 @@
 -libraryjars lib/noarch/oshi-core-6.8.3.jar
 -libraryjars lib/noarch/jna-platform-5.17.0.jar
 -libraryjars lib/noarch/jna-5.17.0.jar
-
-
+-libraryjars lib/noarch/as.jar
 
 -forceprocessing
--printmapping build/3.0-7_19/proguard_mapping.txt
+-dontshrink
+-dontoptimize
+-printmapping build/3.6-3_9/proguard_mapping.txt
 -verbose
 -dontwarn javafx.**
 -ignorewarnings
@@ -139,6 +140,21 @@
 }
 
 -keep,allowshrinking class com.accsyn.gui.media.ASProxyViewDialog
+
+-keep,allowshrinking class com.accsyn.copy.ASCConfig {
+    <fields>;
+    <methods>;
+}
+
+-keep,allowshrinking class com.accsyn.copy.common.ASCUtils {
+    <fields>;
+    <methods>;
+}
+
+-keep,allowshrinking class com.accsyn.copy.ASCCopy {
+    <fields>;
+    <methods>;
+}
 
 # Keep - Applications. Keep all application classes, along with their 'main' methods.
 -keepclasseswithmembers public class * {

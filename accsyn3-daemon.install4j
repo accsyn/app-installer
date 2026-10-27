@@ -8,7 +8,7 @@
       <variable name="sys.ext.updatesFileName" value="updates_daemon.xml" />
       <variable name="accsyn_platform_vm_arguments" />
     </variables>
-    <codeSigning macEnabled="true" macPkcs12File="../../encrypted/cert/apple/apple.p12" windowsEnabled="true" windowsKeySource="pkcs11" windowsPkcs12File="../../encrypted/cert/codesign/codesign.p12" windowsPkcs11Library="/Library/Frameworks/eToken.framework/Versions/A/libeToken.dylib" macNotarize="true" appleId="henrik.norin@highdefinitionrender.com">
+    <codeSigning macEnabled="true" macPkcs12File="/Users/henriknorin/Documents/accsyn/encrypted/cert/apple/apple.p12" windowsEnabled="true" windowsKeySource="pkcs11" windowsPkcs12File="/Users/henriknorin/Documents/accsyn/encrypted/cert/codesign/codesign.p12" windowsPkcs11Library="/Library/Frameworks/eToken.framework/Versions/A/libeToken.dylib" macNotarize="true" appleId="henrik.norin@highdefinitionrender.com">
       <windowsPkcs11Identifier issuer="Sectigo Public Code Signing CA R36" serial="e0243f3fc223723d9afdd7fed148824" subject="HDR AB" />
     </codeSigning>
     <jreBundles jdkProviderId="Zulu" release="18/18.0.2" />
@@ -145,6 +145,7 @@ StandardOutput=null</serviceFile>
           <variable name="accsyn_daemon_user" valueClass="string" />
           <variable name="accsyn_daemon_password" valueClass="string" hidden="true" />
           <variable name="accsyn_daemon_umask" valueClass="string" />
+          <variable name="accsyn_daemon_env" valueClass="string" />
           <variable name="accsyn_conf_dir" valueClass="string" />
           <variable name="accsyn_log_dir" valueClass="string" />
           <variable name="accsyn_workspace" valueClass="string" />
@@ -473,7 +474,7 @@ return console.askOkCancel(message, true);
               </action>
               <action id="1726" beanClass="com.install4j.runtime.beans.actions.control.SetMessageAction" actionElevationType="none" rollbackBarrierExitCode="0">
                 <serializedBean>
-                  <property name="statusMessage" type="string">Configuring daemon user and umask</property>
+                  <property name="statusMessage" type="string">Configuring daemon user, umask and environment</property>
                   <property name="useStatus" type="boolean" value="true" />
                 </serializedBean>
               </action>

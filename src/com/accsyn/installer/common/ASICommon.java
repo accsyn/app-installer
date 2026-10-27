@@ -47,16 +47,16 @@ public class ASICommon {
 	public static final String OS_MAC = "mac";
 	public static final String OS_LINUX = "linux";
 	public static final String OS_SOLARIS = "solaris";
-	
+
 	public static int DEFAULT_REST_PORT = 443;
 
 	public static final int REST_GET = 0;
 	public static final int REST_PUT = 1;
 	public static final int REST_POST = 2;
 	public static final int REST_DELETE = 3;
-	
+
 	public static final String MAC_DAEMON_PLIST = "/Library/LaunchDaemons/com.accsyn.daemon.plist";
-	
+
 	public ASICommon() {
 		// TODO Auto-generated constructor stub
 	}
@@ -67,19 +67,20 @@ public class ASICommon {
 	}
 
 	// Logging
-	
+
 	public static final String debug(String s) {
-		if (isDEV())
+		if (isDEV()) {
 			info("[DEBUG] "+s);
+		}
 		return s;
 	}
-	
+
 	public static final String info(String s) {
 		Util.logInfo("Accsyn-installer", "(ASI, " + (new Date()) + ") " + s);
 		System.out.println("(ASI, " + (new Date()) + ") " + s);
 		return s;
 	}
-	
+
 	public static final String warning(String s) {
 		return info("[WARNING] "+s);
 	}
@@ -87,7 +88,7 @@ public class ASICommon {
 	public static final String warning(Exception e) {
 		return warning(strStackTrace(e));
 	}
-	
+
 	public static final String error(String s) {
 		info("[ERROR] " + s);
 		Util.logError("Accsyn-installer", "(ASI, " + (new Date()) + ") [WARNING] " + s);
@@ -104,10 +105,12 @@ public class ASICommon {
 			e.printStackTrace(pw);
 			return sw.getBuffer().toString();
 		} finally {
-			if (pw != null)
+			if (pw != null) {
 				pw.close();
-			if (pw != null)
+			}
+			if (pw != null) {
 				pw.close();
+			}
 		}
 	}
 
@@ -117,7 +120,7 @@ public class ASICommon {
 		error(s);
 		return s;
 	}
-	
+
 	public static String getOS() {
 
 		String s = System.getProperty("os.name");
@@ -143,11 +146,11 @@ public class ASICommon {
 	public static boolean isWindows() {
 		return getOS().equalsIgnoreCase(OS_WINDOWS);
 	}
-	
+
 	public static boolean isLinux() {
 		return getOS().equalsIgnoreCase(OS_LINUX);
 	}
-	
+
 	public static String getHostname() {
 		try {
 			return InetAddress.getLocalHost().getHostName();
@@ -156,7 +159,7 @@ public class ASICommon {
 			return "?hostname?";
 		}
 	}
-	
+
 	boolean checkExistingConfiguration() {
 		return false;
 	}
@@ -169,8 +172,9 @@ public class ASICommon {
 				String line = br.readLine();
 
 				while (line != null) {
-					if (0 < sb.length())
+					if (0 < sb.length()) {
 						sb.append("\n");
+					}
 					sb.append(line);
 					line = br.readLine();
 				}
@@ -183,13 +187,14 @@ public class ASICommon {
 		}
 		return null;
 	}
-	
+
 	public static void writeFile(String path, String write_text) {
 		PrintWriter writer;
 		try {
 			File f = new File(path);
-			if (!f.getParentFile().exists())
+			if (!f.getParentFile().exists()) {
 				ASICommon.info("Creating '" + f.getParentFile() + "'");
+			}
 			f.getParentFile().mkdirs();
 			writer = new PrintWriter(path, "UTF-8");
 			writer.println(write_text);
@@ -200,9 +205,9 @@ public class ASICommon {
 			warning(e);
 		}
 	}
-	
+
 	// Shell execution
-	
+
 	public static String[] generateCommandLine(String executable, String[] args) {
 		String cmd[];
 		if (getOS().equals(OS_WINDOWS)) {
@@ -232,8 +237,8 @@ public class ASICommon {
 				cmd[1] = "-c";
 				cmd[2] = executable;
 				if (args != null) {
-					for (int idx = 0; idx < args.length; idx++) {
-						cmd[2] = cmd[2] + (0 < cmd[2].length() ? " " : "") + args[idx];
+					for (String arg : args) {
+						cmd[2] = cmd[2] + (0 < cmd[2].length() ? " " : "") + arg;
 					}
 				}
 			} else {
@@ -248,7 +253,7 @@ public class ASICommon {
 		}
 		return cmd;
 	}
-	
+
 
 	public static Object[] executeCatchOutput(String executable, String[] args) {
 		Object[] retval = { -1, null };
@@ -271,8 +276,9 @@ public class ASICommon {
 			retval[0] = proc.waitFor();
 			Thread.sleep(25); // Let streams finish read
 			String output_merged = errorGobbler.output.trim();
-			if (0 < output_merged.length())
+			if (0 < output_merged.length()) {
 				output_merged += "\n";
+			}
 			output_merged += outputGobbler.output.trim();
 			retval[1] = output_merged;
 		} catch (Throwable t) {
@@ -281,8 +287,8 @@ public class ASICommon {
 		}
 		return retval;
 	}
-	
-	
+
+
 	private static class ASStreamGobbler extends Thread {
 		InputStream is;
 		String type;
@@ -292,10 +298,11 @@ public class ASICommon {
 		public ASStreamGobbler(InputStream is, String type, boolean store_output) {
 			this.is = is;
 			this.type = type;
-			if (store_output)
+			if (store_output) {
 				this.output = "";
-			else
+			} else {
 				this.output = null;
+			}
 			this.silent = silent;
 		}
 
@@ -308,28 +315,32 @@ public class ASICommon {
 				br = new BufferedReader(isr);
 				String line = null;
 				while ((line = br.readLine()) != null) {
-					if (!this.silent)
+					if (!this.silent) {
 						ASICommon.info(type + ">" + line);
-					if (this.output != null)
+					}
+					if (this.output != null) {
 						this.output += line + "\n";
+					}
 				}
 			} catch (IOException e) {
 				info("[WARNING] ASStreamGobbler; "+e.toString());
 			} finally {
-				if (br != null)
+				if (br != null) {
 					try {
 						br.close();
 					} catch (IOException e) {
 					}
-				if (isr != null)
+				}
+				if (isr != null) {
 					try {
 						isr.close();
 					} catch (IOException e) {
 					}
+				}
 			}
 		}
 	}
-	
+
 	// Config
 
 	public static File ensureDirExists(File f) {
@@ -339,32 +350,33 @@ public class ASICommon {
 		}
 		return f;
 	}
-	
+
 	public static String getRootPathEnv() {
 		return System.getenv("AS_ROOT_PATH");
-	}	
-	
+	}
+
 	public static String getRootDir() {
 		/*Return the accsyn root dir, can be transposed by environment variables */
 		if (getRootPathEnv() != null) {
 			return getRootPathEnv();
 		} else {
-			if (getOS().equals(OS_WINDOWS))
+			if (getOS().equals(OS_WINDOWS)) {
 				return System.getenv("SystemDrive");
-			else
+			} else {
 				return "/";
+			}
 		}
 	}
 
 	public static String getHomeDir() {
 		String result;
-		if (getOS().equals(OS_WINDOWS))
+		if (getOS().equals(OS_WINDOWS)) {
 			result = System.getenv("USERPROFILE");
-		else if (getOS().equals(OS_MAC))
+		} else if (getOS().equals(OS_MAC)) {
 			result = System.getenv("HOME");
-		else if (getOS().equals(OS_LINUX))
+		} else if (getOS().equals(OS_LINUX)) {
 			result = System.getenv("HOME");
-		else {
+		} else {
 			System.err.println("Can't evauluate home dir - unsupported OS!");
 			return null;
 		}
@@ -372,8 +384,9 @@ public class ASICommon {
 			if (getOS().equals(OS_WINDOWS)) {
 				// TODO: support home dir on network drive
 				result = getRootDir()+result.substring(2);
-			} else
+			} else {
 				result = getRootDir()+result;
+			}
 		}
 		return result;
 	}
@@ -381,12 +394,13 @@ public class ASICommon {
 	public static String getConfDir() {
 		String retval = null;
 		// Central settings, only one daemon allowed per machine
-		if (getOS().equals(OS_WINDOWS))
+		if (getOS().equals(OS_WINDOWS)) {
 			retval = getRootDir() + File.separator + "ProgramData" + File.separator  + "accsyn";
-		else if (getOS().equals(OS_MAC))
+		} else if (getOS().equals(OS_MAC)) {
 			retval = getRootDir()+  File.separator + "Library" +  File.separator + "Preferences" + File.separator  +  "com.accsyn";
-		else
+		} else {
 			retval = getRootDir() +  File.separator + "etc" + File.separator  +  "accsyn";
+		}
 
 		ASICommon.info("[" + (new SimpleDateFormat("yyMMdd_HHmmss.SSS")).format(new Date()) + "] Using configuration dir: '" + retval + "'");
 		return retval;
@@ -396,14 +410,15 @@ public class ASICommon {
 	public static String getDataDir() {
 		String retval = null;
 		// Central data, only one daemon allowed per machine
-		if (getOS().equals(OS_WINDOWS))
+		if (getOS().equals(OS_WINDOWS)) {
 			// return "C:\\ProgramData\\Accsyn";
 			retval = getRootDir() + File.separator + "ProgramData"+ File.separator + "accsyn" + File.separator + "data";
-		else if (getOS().equals(OS_MAC))
+		} else if (getOS().equals(OS_MAC)) {
 			retval = getRootDir() + File.separator + "Library" + File.separator + "Application Support" + File.separator + "com.accsyn" + File.separator + "data";
-		else
+		} else {
 			retval = getRootDir() + File.separator + "var" + File.separator + "lib" + File.separator +  "accsyn" + File.separator + "data";
-		
+		}
+
 		File f = ensureDirExists(new File(retval));
 
 		ASICommon.info("[" + (new SimpleDateFormat("yyMMdd_HHmmss.SSS")).format(new Date()) + "] Using data dir: '" + f.getAbsolutePath() + "'");
@@ -412,25 +427,28 @@ public class ASICommon {
 
 	public static boolean hasData() {
 		File data_dir = new File(getDataDir());
-		if (!data_dir.exists())
+		if (!data_dir.exists()) {
 			return false;
+		}
 		File users_dir = new File(data_dir.getAbsolutePath(), "users");
-		if (!users_dir.exists())
+		if (!users_dir.exists()) {
 			return false;
+		}
 		return users_dir.listFiles().length>0;
 	}
-	
+
 	public static String getLegacyDataDir() {
 		String retval = null;
 		// Central data, only one daemon allowed per machine
-		if (getOS().equals(OS_WINDOWS))
+		if (getOS().equals(OS_WINDOWS)) {
 			// return "C:\\ProgramData\\Accsyn";
 			retval = getRootDir() + File.separator + "ProgramData"+ File.separator + "accsyn";
-		else if (getOS().equals(OS_MAC))
+		} else if (getOS().equals(OS_MAC)) {
 			retval = getRootDir()+  File.separator + "Library" +  File.separator + "Preferences" + File.separator  +  "com.accsyn";
-		else
+		} else {
 			retval = getRootDir() + File.separator + "etc" + File.separator + "accsyn";
-		
+		}
+
 		File f = ensureDirExists(new File(retval));
 
 		ASICommon.info("[" + (new SimpleDateFormat("yyMMdd_HHmmss.SSS")).format(new Date()) + "] Using legacy data dir: '" + f.getAbsolutePath() + "'");
@@ -439,13 +457,14 @@ public class ASICommon {
 
 	public static boolean hasLegacyData() {
 		File data_dir = new File(getLegacyDataDir());
-		if (!data_dir.exists())
+		if (!data_dir.exists()) {
 			return false;
+		}
 		File domain_txt = new File(data_dir.getAbsolutePath(), "domain.txt");
 		return domain_txt.exists();
 	}
-	
-	
+
+
 	public static String getLogDir() {
 		return getLogDir(null);
 	}
@@ -453,35 +472,38 @@ public class ASICommon {
 	public static String getLogDir(String subdir) {
 		String retval;
 		// Central log, only one daemon allowed per machine
-		if (getOS().equals(OS_WINDOWS))
+		if (getOS().equals(OS_WINDOWS)) {
 			// return "C:\\ProgramData\\Accsyn";
 			retval = getRootDir() + File.separator + "ProgramData" + File.separator +  "accsyn" + File.separator + "log";
-		else
+		} else {
 			retval = getRootDir() + File.separator  + "var" + File.separator  + "log" + File.separator + "accsyn";
+		}
 
 		File result = new File(retval + (subdir != null ? File.separator + subdir : ""));
 		ensureDirExists(result);
 		ASICommon.info("[" + (new SimpleDateFormat("yyMMdd_HHmmss.SSS")).format(new Date()) + "] Using log dir: '" + result.getAbsolutePath() + "'");
 		return result.getAbsolutePath();
 	}
-	
+
 	public static String getTempDir() {
 		String sys_tmp_dir = null;
 		sys_tmp_dir = System.getProperty("java.io.tmpdir");
 		if (sys_tmp_dir == null) {
-			if (isWindows())
+			if (isWindows()) {
 				sys_tmp_dir = System.getenv("TMPDIR") != null ? System.getenv("TMPDIR") : System.getenv("TMPPATH");
-			else
+			} else {
 				sys_tmp_dir = System.getenv("TEMP") != null ? System.getenv("TEMP") : System.getenv("TMP");
+			}
 		}
 		if (sys_tmp_dir == null || !(new File(sys_tmp_dir)).exists()) {
 			warning("Could not evaulate system temporary directory!");
 		}
 		if (getRootPathEnv() != null) {
-			if (isWindows())
+			if (isWindows()) {
 				sys_tmp_dir = getRootDir()+sys_tmp_dir.substring(2);
-			else
+			} else {
 				sys_tmp_dir = getRootDir()+sys_tmp_dir;
+			}
 		}
 		File result = new File(sys_tmp_dir + File.separator + ".accsyn");
 		ensureDirExists(result);
@@ -489,7 +511,7 @@ public class ASICommon {
 		return result.getAbsolutePath();
 	}
 	// Registry REST
-	
+
 	/*
 	 * private static final File getDownloadAccSynCert(boolean download) throws
 	 * Exception { File result = new File(getConfDir() + File.separator +
@@ -508,10 +530,10 @@ public class ASICommon {
 	 * info("Downloaded cert '" + result.getName() + "'(" + size + "b)"); } catch
 	 * (IOException e) { error(e); } return result; }
 	 */
-	
-	
+
+
 	// REST call
-	
+
 	public static JSONObject serializeRESTData(JSONObject d) {
 		for (Iterator<String> iterator = d.keySet().iterator(); iterator.hasNext();) {
 			String key = iterator.next();
@@ -519,13 +541,14 @@ public class ASICommon {
 			if (o instanceof JSONObject) {
 				serializeRESTData((JSONObject) o);
 			} else if (o instanceof ArrayList) {
-				ArrayList<Object> serialized_list = new ArrayList<Object>();
+				ArrayList<Object> serialized_list = new ArrayList<>();
 				for (int idx = 0; idx < ((ArrayList<Object>) o).size(); idx++) {
 					Object o2 = ((ArrayList<Object>) o).get(idx);
-					if (o2 instanceof JSONObject)
+					if (o2 instanceof JSONObject) {
 						serialized_list.add(serializeRESTData((JSONObject) o2));
-					else
+					} else {
 						serialized_list.add(o2);
+					}
 				}
 				d.put(key, serialized_list);
 			} else if (o instanceof Date) {
@@ -542,8 +565,9 @@ public class ASICommon {
 			for (Iterator<String> iterator = d.keySet().iterator(); iterator.hasNext();) {
 				String key = iterator.next();
 				Object[] sub_retval = deSerializeRESTResponse(d.get(key));
-				if (sub_retval[1].equals(Boolean.TRUE))
+				if (sub_retval[1].equals(Boolean.TRUE)) {
 					d.put(key, sub_retval[0]);
+				}
 			}
 		} else if (o instanceof ArrayList) {
 			// Replace with a new list
@@ -555,11 +579,13 @@ public class ASICommon {
 				if (sub_retval[1].equals(Boolean.TRUE)) {
 					l.add(sub_retval[0]);
 					did_modify = true;
-				} else
+				} else {
 					l.add(o2);
+				}
 			}
-			if (did_modify)
+			if (did_modify) {
 				return new Object[] { l, Boolean.TRUE };
+			}
 		} else if (o instanceof String) {
 			Pattern p = Pattern.compile("^[0-9]{4}-[0-9]{2}-[0-9]{2}[T]{1}[0-9]{2}:[0-9]{2}:[0-9]{2}$");
 			if (p.matcher((String) o).find()) {
@@ -569,13 +595,13 @@ public class ASICommon {
 				} catch (Exception e) {
 					error(e);
 				}
-			} 
+			}
 		}
 		return new Object[] { o, Boolean.FALSE };
 	}
 
 	public static HashMap<String, String> createHeaders(String name, String value, String key) {
-		HashMap<String, String> headers = new HashMap<String, String>();
+		HashMap<String, String> headers = new HashMap<>();
 		headers.put(key, name + " " + new String(Base64.encodeBase64(value.getBytes())));
 		return headers;
 	}
@@ -594,17 +620,19 @@ public class ASICommon {
 			hostname = "http://localhost";
 			port = 8180;
 		} else {
-			if (workspace == null)
+			if (workspace == null) {
 				hostname = "https://master.accsyn.com";
-			else
+			} else {
 				hostname = "https://" + workspace + ".accsyn.com";
+			}
 		}
 
 		String url = null, text = null, str_method = "?";
 		int retries = 2, timeout = 60 * 1000;
 		try {
-			if (retries <= 0)
+			if (retries <= 0) {
 				retries = 2;
+			}
 			int iterations = 0;
 			while (0 < retries) {
 				CloseableHttpClient httpClient = null;
@@ -635,8 +663,9 @@ public class ASICommon {
 						}
 					}
 					url = hostname;
-					if (uri == null)
+					if (uri == null) {
 						uri = "";
+					}
 					url += ":" + port + "/api/v3/" + uri;
 
 					if (data != null) {
@@ -682,11 +711,11 @@ public class ASICommon {
 					req.setConfig(RequestConfig.custom().setConnectTimeout(timeout).setSocketTimeout(5 * 60 * 1000).setConnectionRequestTimeout(60 * 1000).setStaleConnectionCheckEnabled(true).build());
 					// if (AccSyn._client_api_key != null)
 					// data.put("api_key", AccSyn._client_api_key);
-					if (headers == null)
-						headers = new HashMap<String, String>();
+					if (headers == null) {
+						headers = new HashMap<>();
+					}
 					headers.put("X-Accsyn-Device", "Installer " + VERSION + " @ " + getOS());
-					for (Iterator<String> iterator = headers.keySet().iterator(); iterator.hasNext();) {
-						String key = iterator.next();
+					for (String key : headers.keySet()) {
 						req.setHeader(key, headers.get(key));
 					}
 					// f (auth != null)
@@ -719,8 +748,9 @@ public class ASICommon {
 						iterations += 1;
 						response = httpClient.execute(req, handler);
 						debug("Rest response: " + response);
-						if (isDEV())
+						if (isDEV()) {
 							System.out.print(response.length() + "b:" + (System.currentTimeMillis() - millis_start) + "ms~");
+						}
 						JSONObject retval = null;
 						try {
 							retval = (JSONObject) (new JSONParser()).parse(response);
@@ -742,8 +772,9 @@ public class ASICommon {
 						if (!headers.containsKey("ASProxy")) {
 							JSONObject result = (JSONObject) deSerializeRESTResponse(retval)[0];
 							return result;
-						} else
+						} else {
 							return retval;
+						}
 					} finally {
 					}
 				} catch (Exception e1) {
@@ -763,8 +794,9 @@ public class ASICommon {
 						Thread.sleep(2000);
 					}
 				} finally {
-					if (httpClient != null)
+					if (httpClient != null) {
 						httpClient.close();
+					}
 				}
 			}
 		} catch (Exception e) {
@@ -777,8 +809,8 @@ public class ASICommon {
 		return null;
 	}
 
-	// Daemon 
-	
+	// Daemon
+
 	public static String detectDaemonUser() {
 		try {
 			if (isWindows()) {
@@ -804,15 +836,19 @@ public class ASICommon {
 						int idx_value = output.indexOf(":", idx);
 						if (0<idx_value) {
 							String result = output.substring(idx_value+1, Math.max(output.indexOf("\n", idx_value), output.length()));
-							if (result.startsWith(".\\"))
+							if (result.startsWith(".\\")) {
 								result = result.substring(2);
+							}
 							result = result.trim().replace("\n", "").replace("\t", "");
-							if (!result.equals("LocalSystem"))
+							if (!result.equals("LocalSystem")) {
 								return result;
-						} else
+							}
+						} else {
 							warning("detectDaemonUser; No : after 'SERVICE_START_NAME' entry! Output: "+output);
-					} else
+						}
+					} else {
 						warning("detectDaemonUser; No 'SERVICE_START_NAME' entry! Output: "+output);
+					}
 				} else {
 					warning("detectDaemonUser; Could not query Windows service! Details: "+output);
 				}
@@ -826,11 +862,13 @@ public class ASICommon {
 						int idx_value = contents.indexOf("<string>", idx);
 						if (0<idx_value) {
 							return contents.substring(idx_value+8, contents.indexOf("</string>", idx_value));
-						} else
+						} else {
 							warning("detectDaemonUser; No <string> after Username entry! Output: "+contents);
-					} else
+						}
+					} else {
 						warning("detectDaemonUser; No Username entry! Output: "+contents);
-				} 
+					}
+				}
 			} else {
 				// Assume Linux/*NIX
 				String p = "/etc/init.d/accsyndaemon";
@@ -842,10 +880,12 @@ public class ASICommon {
 						int idx_value = contents.indexOf("=", idx);
 						if (0<idx_value) {
 							return contents.substring(idx_value+1, contents.indexOf("\n", idx_value));
-						} else
+						} else {
 							warning("detectDaemonUser; No = after USERNAME entry @ "+p+"!");
-					} else
+						}
+					} else {
 						warning("detectDaemonUser; No USERNAME entry @ "+p+"!");
+					}
 				}
 			}
 		} catch (Exception e) {
@@ -854,7 +894,7 @@ public class ASICommon {
 		}
 		return null;
 	}
-	
+
 	public static String detectDaemonUmask() {
 		try {
 			if (isWindows()) {
@@ -869,11 +909,13 @@ public class ASICommon {
 						int idx_value = contents.indexOf("<integer>", idx);
 						if (0<idx_value) {
 							return contents.substring(idx_value+9, contents.indexOf("</integer>", idx_value));
-						} else
+						} else {
 							warning("detectDaemonUmask; No <integer> after Umask entry! Output: "+contents);
-					} else
+						}
+					} else {
 						warning("detectDaemonUmask; No Umask entry! Output: "+contents);
-				} 
+					}
+				}
 			} else {
 				// Assume Linux/*NIX
 				String p = "/etc/init.d/accsyndaemon";
@@ -885,10 +927,24 @@ public class ASICommon {
 						int idx_value = contents.indexOf("=", idx);
 						if (0<idx_value) {
 							return contents.substring(idx_value+1, contents.indexOf("\n", idx_value));
-						} else
+						} else {
 							warning("detectDaemonUmask; No = after UMASK entry @ "+p+"!");
-					} else
+						}
+					} else {
 						warning("detectDaemonUmask; No UMASK entry @ "+p+"!");
+					}
+				} else {
+					p = "/etc/systemd/system/accsyndaemon.service";
+					f = new File(p);
+					if (f.exists() && f.canRead()) {
+						String contents = readFile(p);
+						for (String line : contents.split("\n")) {
+							String trimmed = line.trim();
+							if (trimmed.toLowerCase().startsWith("umask=")) {
+								return trimmed.substring(trimmed.indexOf("=") + 1).trim();
+							}
+						}
+					}
 				}
 			}
 		} catch (Exception e) {
@@ -897,7 +953,180 @@ public class ASICommon {
 		}
 		return null;
 	}
-	
+
+	/**
+	 * Detect preserved daemon environment variables from launchd plist or systemd unit.
+	 * Returns newline-separated KEY=VALUE entries, or null if none found.
+	 */
+	public static String detectDaemonEnv() {
+		try {
+			if (isWindows()) {
+				return null;
+			} else if (isMac()) {
+				String p = MAC_DAEMON_PLIST;
+				File f = new File(p);
+				if (f.exists() && f.canRead()) {
+					String contents = readFile(p);
+					int idx = contents.toLowerCase().indexOf("<key>environmentvariables</key>");
+					if (0 <= idx) {
+						int dict_start = contents.indexOf("<dict>", idx);
+						if (0 <= dict_start) {
+							int dict_end = contents.indexOf("</dict>", dict_start);
+							if (0 <= dict_end) {
+								String block = contents.substring(dict_start + 6, dict_end);
+								ArrayList<String> entries = new ArrayList<>();
+								int pos = 0;
+								while (true) {
+									int key_idx = block.toLowerCase().indexOf("<key>", pos);
+									if (key_idx < 0) {
+										break;
+									}
+									int key_end = block.indexOf("</key>", key_idx);
+									if (key_end < 0) {
+										break;
+									}
+									String key = block.substring(key_idx + 5, key_end).trim();
+									int str_idx = block.indexOf("<string>", key_end);
+									if (str_idx < 0) {
+										break;
+									}
+									int str_end = block.indexOf("</string>", str_idx);
+									if (str_end < 0) {
+										break;
+									}
+									String value = block.substring(str_idx + 8, str_end);
+									entries.add(key + "=" + value);
+									pos = str_end + 9;
+								}
+								if (0 < entries.size()) {
+									StringBuilder sb = new StringBuilder();
+									for (int i = 0; i < entries.size(); i++) {
+										if (0 < i) {
+											sb.append("\n");
+										}
+										sb.append(entries.get(i));
+									}
+									return sb.toString();
+								}
+							} else {
+								warning("detectDaemonEnv; No </dict> after EnvironmentVariables @ "+p+"!");
+							}
+						} else {
+							warning("detectDaemonEnv; No <dict> after EnvironmentVariables @ "+p+"!");
+						}
+					} else {
+						info("detectDaemonEnv; No EnvironmentVariables entry @ "+p);
+					}
+				}
+			} else {
+				String p = "/etc/systemd/system/accsyndaemon.service";
+				File f = new File(p);
+				if (f.exists() && f.canRead()) {
+					String contents = readFile(p);
+					ArrayList<String> entries = new ArrayList<>();
+					for (String line : contents.split("\n")) {
+						String trimmed = line.trim();
+						if (trimmed.startsWith("Environment=")) {
+							parseSystemdEnvironmentValue(trimmed.substring("Environment=".length()).trim(), entries);
+						}
+					}
+					if (0 < entries.size()) {
+						StringBuilder sb = new StringBuilder();
+						for (int i = 0; i < entries.size(); i++) {
+							if (0 < i) {
+								sb.append("\n");
+							}
+							sb.append(entries.get(i));
+						}
+						return sb.toString();
+					}
+					info("detectDaemonEnv; No Environment= entries @ "+p);
+				} else {
+					info("detectDaemonEnv; No systemd unit @ "+p);
+				}
+			}
+		} catch (Exception e) {
+			warning("Could not detect daemon env, details: "+e.toString());
+			warning(e);
+		}
+		return null;
+	}
+
+	private static void parseSystemdEnvironmentValue(String value, ArrayList<String> entries) {
+		if (value == null || value.length() == 0) {
+			return;
+		}
+		int i = 0;
+		while (i < value.length()) {
+			while (i < value.length() && value.charAt(i) == ' ') {
+				i++;
+			}
+			if (i >= value.length()) {
+				break;
+			}
+			if (value.charAt(i) == '"') {
+				int end = value.indexOf('"', i + 1);
+				if (end < 0) {
+					entries.add(value.substring(i + 1));
+					break;
+				}
+				entries.add(value.substring(i + 1, end));
+				i = end + 1;
+			} else if (value.charAt(i) == '\'') {
+				int end = value.indexOf('\'', i + 1);
+				if (end < 0) {
+					entries.add(value.substring(i + 1));
+					break;
+				}
+				entries.add(value.substring(i + 1, end));
+				i = end + 1;
+			} else {
+				entries.add(value.substring(i));
+				break;
+			}
+		}
+	}
+
+	private static ArrayList<String> splitEnvEntries(String env) {
+		ArrayList<String> entries = new ArrayList<>();
+		if (env == null || env.length() == 0) {
+			return entries;
+		}
+		for (String line : env.split("\n")) {
+			String trimmed = line.trim();
+			if (0 < trimmed.length() && 0 < trimmed.indexOf("=")) {
+				entries.add(trimmed);
+			}
+		}
+		return entries;
+	}
+
+	private static String xmlEscape(String s) {
+		if (s == null) {
+			return "";
+		}
+		return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\"", "&quot;");
+	}
+
+	private static String formatMacEnvironmentVariables(String env) {
+		ArrayList<String> entries = splitEnvEntries(env);
+		if (entries.size() == 0) {
+			return null;
+		}
+		StringBuilder sb = new StringBuilder();
+		sb.append("    <key>EnvironmentVariables</key>\n");
+		sb.append("    <dict>\n");
+		for (String entry : entries) {
+			int eq = entry.indexOf("=");
+			String key = entry.substring(0, eq);
+			String value = entry.substring(eq + 1);
+			sb.append("        <key>").append(xmlEscape(key)).append("</key>\n");
+			sb.append("        <string>").append(xmlEscape(value)).append("</string>\n");
+		}
+		sb.append("    </dict>\n");
+		return sb.toString();
+	}
+
 	public static boolean validateSystemUser(String username) {
 		if (isWindows()) {
 			Object[] retval = executeCatchOutput("net", new String[] {"user", username});
@@ -909,12 +1138,18 @@ public class ASICommon {
 	}
 
 	public static boolean updateDaemon(String username, String password, String umask) {
+		return updateDaemon(username, password, umask, null);
+	}
+
+	public static boolean updateDaemon(String username, String password, String umask, String env) {
 		try {
 			if (isWindows()) {
-				if (username == null || username.length()==0)
+				if (username == null || username.length()==0) {
 					return true;
-				if (username.indexOf("\\") == -1)
+				}
+				if (username.indexOf("\\") == -1) {
 					username = ".\\"+username;
+				}
 				Object[] retval = executeCatchOutput("sc", new String[] {"config", "AccsynDaemon", "obj=", username, "password=", password, "type=", "own"});
 				//else
 				//retval = executeCatchOutput("sc", new String[] {"config", "AccsynDaemon", "obj=", ".\\LocalSystem", "type=", "own"});
@@ -928,16 +1163,24 @@ public class ASICommon {
 				}
 			} else if (isMac()) {
 				String p = MAC_DAEMON_PLIST;
-				info("writeDaemonUser; Updating Mac OS launchd with username/umask @ '"+p+"'");
+				info("writeDaemonUser; Updating Mac OS launchd with username/umask/env @ '"+p+"'");
 				// install4j overwrites plist, append user
-				
+
 				File f = new File(p);
 				if (f.exists() && f.canRead()/* && f.canWrite()*/) {
 					String result = "";
 					String[] parts = readFile(p).split("\n");
-					for (int idx = 0; idx < parts.length; idx++) {
-						String line = parts[idx];
-						if (-1<line.indexOf("</dict>")) {
+					String env_block = formatMacEnvironmentVariables(env);
+					// Insert custom keys before the last (root) </dict>
+					int last_dict_idx = -1;
+					for (int i = 0; i < parts.length; i++) {
+						if (-1 < parts[i].indexOf("</dict>")) {
+							last_dict_idx = i;
+						}
+					}
+					for (int i = 0; i < parts.length; i++) {
+						String line = parts[i];
+						if (i == last_dict_idx) {
 							if (username != null && 0<username.length()) {
 								result += "    <key>UserName</key>\n";
 								result += "    <string>"+username+"</string>\n";
@@ -946,14 +1189,20 @@ public class ASICommon {
 								result += "    <key>Umask</key>\n";
 								result += "    <integer>"+Integer.parseInt(umask,8)+"</integer>\n";
 							}
+							if (env_block != null) {
+								result += env_block;
+							}
 						}
 						result += line + "\n";
 					}
 					writeFile(p, result);
 					info("writeDaemonUser; Successfully updated Mac OS launchd configuration");
-				} else
+					return true;
+				} else {
 					warning("writeDaemonUser; Cannot access: "+p+"!");
-				
+					return false;
+				}
+
 			} else {
 				String p = "/etc/init.d/accsyndaemon";
 				File f = new File(p);
@@ -961,32 +1210,36 @@ public class ASICommon {
 					String[] parts = readFile(p).split("\n");
 					String result = "";
 					boolean within_case_entry = false;
-					for (int idx = 0; idx < parts.length; idx++) {
-						String line = parts[idx];
+					for (String part : parts) {
+						String line = part;
 						String post_content = null;
 						if (-1<line.indexOf("INSTALL4J_JAVA_PREFIX=\"")) {
 							post_content = "";
-							if (username != null && 0<username.length())
+							if (username != null && 0<username.length()) {
 								post_content += "USERNAME="+username+"\n";
-							if (umask != null && 0<umask.length())
+							}
+							if (umask != null && 0<umask.length()) {
 								post_content += "UMASK="+umask+"\n";
+							}
 						} else if (-1<line.indexOf("start)") || -1<line.indexOf("start-launchd)") || -1<line.indexOf("echo \"Restarting accsyndaemon\"") || -1<line.indexOf("run)") || -1<line.indexOf("run-redirect)")) {
 							within_case_entry = true;
 						} else if (within_case_entry) {
 							String p_tmp = "/tmp";
-							if (System.getenv("TMPDIR") != null)
+							if (System.getenv("TMPDIR") != null) {
 								p_tmp = System.getenv("TMPDIR");
-							else if (System.getenv("TMPPATH") != null)
+							} else if (System.getenv("TMPPATH") != null) {
 								p_tmp = System.getenv("TMPPATH");
+							}
 							String p_wrapper_script_parent = p_tmp+"/.accsyn";
 							String p_wrapper_script = p_wrapper_script_parent  + "/daemon-wrapper.sh";
 							if (-1<line.indexOf("$INSTALL4J_JAVA_PREFIX")) {
 								if (username != null && 0<username.length()) {
 									result += "        if [ ! -e "+p_wrapper_script_parent+" ]; then mkdir -p "+p_wrapper_script_parent+"; fi; \n";
-									if (umask != null && 0<umask.length())
+									if (umask != null && 0<umask.length()) {
 										result += "        echo \"umask ${UMASK}\" >  "+p_wrapper_script+"\n";
+									}
 									line = "        echo \""+line.replace("\"", "\\\"")+"\" >> "+p_wrapper_script;
-									post_content = 
+									post_content =
 											"        chmod 755 "+p_wrapper_script+"\n"+
 											"        su - ${USERNAME} -c "+p_wrapper_script+" > /dev/null 2>&1 \n";
 								} else if (umask != null && 0<umask.length()) {
@@ -997,34 +1250,45 @@ public class ASICommon {
 							}
 						}
 						result += line + "\n";
-						if (post_content != null)
+						if (post_content != null) {
 							result += post_content;
+						}
 					}
 					writeFile(p, result);
 					info("writeDaemonUser; Updated Linux init script with username/umask");
+					return true;
 				} else {
-					warning("writeDaemonUser; Cannot access init script: "+p+", looking for systemd!"); 
+					warning("writeDaemonUser; Cannot access init script: "+p+", looking for systemd!");
 					// Systemd?
 					p = "/etc/systemd/system/accsyndaemon.service";
 					f = new File(p);
 					if (f.exists() && f.canRead()) {
 						String[] parts = readFile(p).split("\n");
 						String result = "";
-						for (int idx = 0; idx < parts.length; idx++) {
-							String line = parts[idx];
+						ArrayList<String> env_entries = splitEnvEntries(env);
+						for (String part : parts) {
+							String line = part;
 							if (-1<line.indexOf("ExecStart=")) {
-								if (username != null && 0<username.length())
+								if (username != null && 0<username.length()) {
 									line += "\nUser="+username;
-								if (umask != null && 0<umask.length())
+								}
+								if (umask != null && 0<umask.length()) {
 									line += "\nUmask="+umask;
+								}
+								for (String entry : env_entries) {
+									line += "\nEnvironment=\""+entry.replace("\"", "\\\"")+"\"";
+								}
 							}
 							result += line + "\n";
 						}
 						writeFile(p, result);
 						executeCatchOutput("systemctl", new String[] {"daemon-reload"});
-						info("writeDaemonUser; Updated Linux systemd script with username/umask");
-					} else
-						warning("writeDaemonUser; Cannot access systemd script: "+p+"!"); 
+						info("writeDaemonUser; Updated Linux systemd script with username/umask/env");
+						return true;
+					} else {
+						warning("writeDaemonUser; Cannot access systemd script: "+p+"!");
+						return false;
+					}
 				}
 			}
 			/*
@@ -1062,7 +1326,7 @@ public class ASICommon {
 				}
 			}*/
 		} catch (Exception e) {
-			warning("writeDaemonUser; Could not write daemon user/umask, details: "+e.toString());
+			warning("writeDaemonUser; Could not write daemon user/umask/env, details: "+e.toString());
 			warning(e);
 		}
 		return false;

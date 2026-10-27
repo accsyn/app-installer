@@ -46,29 +46,29 @@ public class ASIDaemonUserScreen extends AbstractInstallerScreen implements Acti
 	static final String LABEL_09 = "Umask:";
 	static final String LABEL_10 = "Enter umask (leave empty and defaults will apply):";
 	static final String LABEL_11 = "Password:";
-	
+
 	static final String NOTE_01 = "User will have to have read and write access to the storage handled by accsyn (root share), and system users cannot be configured within accsyn unless this user has "+(ASICommon.isWindows()?"administrative":"root")+" permission to switch user (unix: sudo)";
 	static final String NOTE_02 = "All file transfers, operations and hooks will run as this user, this includes file listings with associated file operations (mkdir, rename, move, delete)";
 	static final String NOTE_03 = "You can also configure a global, and per user, system username.";
 	static final String NOTE_04 = "Make sure user have been granted the 'Log on as a service' right (Logon as administrator, goto Administrative Tools>Local Security Policy>Local Policy>User Rights Assignment and add the user to 'Log on as a service' group).";
 	static final String NOTE_05 = "Leave empty and default umask will apply.";
-			
+
 	static final String MESSAGE_01 = "Please enter a username";
 	static final String MESSAGE_02 = "Could not validate user, proceed anyway?";
 	static final String MESSAGE_03 = "Please enter a valid password!";
 	static final String MESSAGE_04 = "Please enter a valid umask (octal form)!";
-	
+
 	private JCheckBox cb_default;
-	
+
 	private JPanel p_override;
 	private JLabel l_username_note;
 	private JTextField tf_daemon_username;
 	private JPasswordField pf_pass;
 	private JTextField tf_daemon_umask;
 	JPanel p_pass;
-	
+
 	//private String username;
-	
+
 
 	// GUI setup ////////////////////////////////////////////////////////////////
 
@@ -87,7 +87,7 @@ public class ASIDaemonUserScreen extends AbstractInstallerScreen implements Acti
 		}
 		return l;
 	}
-	
+
 	private JPanel createSysUsernamePanel() {
 		JPanel panel = new JPanel(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints(GridBagConstraints.RELATIVE, GridBagConstraints.RELATIVE, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(1, 1, 1, 1), 1, 1);
@@ -121,14 +121,15 @@ public class ASIDaemonUserScreen extends AbstractInstallerScreen implements Acti
 		p_pass.add(pf_pass = new JPasswordField(), c_pass);
 		panel.add(p_pass, c);
 		p_pass.setVisible(ASICommon.isWindows());
-		
+
 		panel.add(new JLabel(), c);
-		
+
 		//addNote(panel, c, null, NOTE_03);
-		
-		if (ASICommon.isWindows())
+
+		if (ASICommon.isWindows()) {
 			addNote(panel, c, null, NOTE_04);
-		
+		}
+
 		c.gridheight = GridBagConstraints.REMAINDER;
 		c.weighty = 100;
 		panel.add(new JLabel(), c);
@@ -138,10 +139,11 @@ public class ASIDaemonUserScreen extends AbstractInstallerScreen implements Acti
 
 	@Override
 	public JComponent createComponent() {
-		if (ASICommon.isDEV())
+		if (ASICommon.isDEV()) {
 			ASICommon.info("!!!Launched in DEVELOPMENT mode!!!");
+		}
 		JLabel l;
-		
+
 		JPanel panel = new JPanel(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints(GridBagConstraints.RELATIVE, GridBagConstraints.RELATIVE, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(1, 1, 1, 1), 1, 1);
 		// panel.setOpaque(true);
@@ -159,7 +161,7 @@ public class ASIDaemonUserScreen extends AbstractInstallerScreen implements Acti
 		panel.add(cb_default = new JCheckBox(LABEL_02), c);
 		cb_default.setSelected(true);
 		cb_default.addActionListener(this);
-		
+
 		panel.add(new JLabel(""), c);
 
 		panel.add(p_override = createSysUsernamePanel(), c);
@@ -177,10 +179,11 @@ public class ASIDaemonUserScreen extends AbstractInstallerScreen implements Acti
 		p_umask.add(tf_daemon_umask = new JTextField(), c_umask);
 		panel.add(p_umask, c);
 		p_umask.setVisible(!ASICommon.isWindows());
-		
-		if (!ASICommon.isWindows())
+
+		if (!ASICommon.isWindows()) {
 			addNote(panel, c, null, NOTE_05);
-		
+		}
+
 		c.weightx = 100;
 		c.gridheight = GridBagConstraints.REMAINDER;
 		c.weighty = 50;
@@ -200,8 +203,9 @@ public class ASIDaemonUserScreen extends AbstractInstallerScreen implements Acti
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == cb_default) {
-			if (cb_default.isSelected())
+			if (cb_default.isSelected()) {
 				tf_daemon_username.setText("");
+			}
 		}
 		updateScreen();
 	}
@@ -254,7 +258,7 @@ public class ASIDaemonUserScreen extends AbstractInstallerScreen implements Acti
 		String username = null, password = null, umask=null;
 		if (!cb_default.isSelected()) {
 			// Check input
-			
+
 			if (tf_daemon_username.getText().length()==0) {
 				JOptionPane.showMessageDialog(null, MESSAGE_01, "System username", JOptionPane.WARNING_MESSAGE);
 				return false;
@@ -263,13 +267,15 @@ public class ASIDaemonUserScreen extends AbstractInstallerScreen implements Acti
 				return false;
 			} else {
 				// Validate
-				
-				if (!ASICommon.validateSystemUser(tf_daemon_username.getText()) && JOptionPane.showConfirmDialog(null, MESSAGE_02, "", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE) == JOptionPane.NO_OPTION)
+
+				if (!ASICommon.validateSystemUser(tf_daemon_username.getText()) && JOptionPane.showConfirmDialog(null, MESSAGE_02, "", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE) == JOptionPane.NO_OPTION) {
 					return false;
-				
+				}
+
 				username = tf_daemon_username.getText();
-				if (ASICommon.isWindows())
+				if (ASICommon.isWindows()) {
 					password = pf_pass.getText();
+				}
 			}
 		}
 		umask = tf_daemon_umask.getText();
@@ -280,7 +286,7 @@ public class ASIDaemonUserScreen extends AbstractInstallerScreen implements Acti
 				JOptionPane.showMessageDialog(null, MESSAGE_04, "Configure daemon", JOptionPane.WARNING_MESSAGE);
 				return false;
 			}
-		} 
+		}
 		ic.setVariable("accsyn_daemon_user", username != null ? username : "");
 		ic.setVariable("accsyn_daemon_password", password != null ? password : "");
 		ic.setVariable("accsyn_daemon_umask", umask != null ? umask : "");
@@ -292,10 +298,10 @@ public class ASIDaemonUserScreen extends AbstractInstallerScreen implements Acti
 	@Override
 	public boolean handleConsole(Console console) throws UserCanceledException {
 		InstallerContext ic = getInstallerContext();
-		
+
 		String username = null;
 		String umask = null;
-		
+
 		boolean override_username = false;
 		while (true) {
 			console.println();
@@ -319,8 +325,9 @@ public class ASIDaemonUserScreen extends AbstractInstallerScreen implements Acti
 			console.println();
 			console.println(LABEL_04);
 			addNote(null, null, console, NOTE_01);
-			if (ASICommon.isWindows())
+			if (ASICommon.isWindows()) {
 				addNote(null, null, console, NOTE_04);
+			}
 			console.println();
 			while (true) {
 				String username_unvalidated = null;
@@ -329,11 +336,12 @@ public class ASIDaemonUserScreen extends AbstractInstallerScreen implements Acti
 					String s = console.readLine();
 					if (s == null || s.length()==0) {
 						System.err.println(MESSAGE_01);
-					} else
+					} else {
 						username_unvalidated = s;
+					}
 				}
 				// Validate
-				
+
 				if (!ASICommon.validateSystemUser(username_unvalidated)) {
 					while (true) {
 						console.println();
@@ -342,7 +350,7 @@ public class ASIDaemonUserScreen extends AbstractInstallerScreen implements Acti
 						console.print(LABEL_08);
 						String s = console.readLine();
 						if (s == null || (!s.equalsIgnoreCase("yes") && !s.equalsIgnoreCase("no"))) {
-							
+
 						} else {
 							if (s.equalsIgnoreCase("yes")) {
 								username = username_unvalidated;
@@ -351,16 +359,17 @@ public class ASIDaemonUserScreen extends AbstractInstallerScreen implements Acti
 							break;
 						}
 					}
-					if (username != null)
+					if (username != null) {
 						break;
+					}
 				} else {
 					username = username_unvalidated;
 					break;
 				}
 			}
-	
+
 		}
-		
+
 		if (!ASICommon.isWindows()) {
 			String umask_unvalidated;
 			while (true) {
@@ -376,14 +385,15 @@ public class ASIDaemonUserScreen extends AbstractInstallerScreen implements Acti
 						console.println();
 						System.err.println(MESSAGE_04);
 					}
-				} else
+				} else {
 					break;
+				}
 			}
 		}
-		
+
 		ic.setVariable("accsyn_daemon_user", username != null ? username : "");
 		ic.setVariable("accsyn_daemon_umask", umask != null ? umask : "");
-		
+
 		return true;
 	}
 

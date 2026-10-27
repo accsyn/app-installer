@@ -1,7 +1,6 @@
 package com.accsyn.installer;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -10,29 +9,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
 
-import javax.swing.ButtonGroup;
-import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import org.apache.commons.codec.binary.Base64;
-import org.apache.http.HttpHeaders;
 import org.json.simple.JSONObject;
 
 import com.accsyn.installer.common.ASICommon;
@@ -58,7 +45,7 @@ public class ASIAuthScreen extends AbstractInstallerScreen implements ActionList
 	static final String LABEL_03 = "Please enter choice [yes or no]: ";
 	static final String LABEL_04 = "Configuration data exist, ERASE configuration and do a clean installation?\n\n(Choosing No will keep and reuse current accsyn configuration)";
 	static final String LABEL_05 = "Skip and just install the daemon - I have local server config to be restore later.";
-	
+
 	static final String MESSAGE_01 = "Please enter the server ID as presented on accsyn.io - 24 digits hexadecimal number (case sensitive)";
 	static final String MESSAGE_02 = "A server error occured during authentication, please try again later or contact accsyn support: support@accsyn.com";
 	static final String MESSAGE_03 = "A server error occurred when trying to connect to accsyn, please try again later or contact accsyn support: support@accsyn.com";
@@ -82,11 +69,13 @@ public class ASIAuthScreen extends AbstractInstallerScreen implements ActionList
 		c.gridwidth = GridBagConstraints.REMAINDER;
 
 		panel.add(new JLabel("<html>" + LABEL_01 + "</html>"), c);
-		if (ASICommon.isDEV())
+		if (ASICommon.isDEV()) {
 			panel.add(new JLabel("<html><strong>!!! DEVELOPMENT MODE !!!</strong></html>"), c);
-		if (ASICommon.getRootPathEnv() != null)
+		}
+		if (ASICommon.getRootPathEnv() != null) {
 			panel.add(new JLabel("<html>!!! Root: "+ASICommon.getRootPathEnv()+"!!!</html>"), c);
-		
+		}
+
 		c.insets.top = 40;
 		c.gridwidth = 1;
 		c.weightx = 30;
@@ -139,20 +128,21 @@ public class ASIAuthScreen extends AbstractInstallerScreen implements ActionList
 		c.gridwidth = GridBagConstraints.REMAINDER;
 		c.weightx = 30;
 		panel.add(new JLabel(), c);
-		
+
 		c.gridheight = GridBagConstraints.REMAINDER;
 		c.insets.top = 60;
 		panel.add(cb_skip = new JCheckBox(LABEL_05), c);
 		cb_skip.addActionListener(this);
-		
+
 		return panel;
 	}
 
 	@Override
 	public JComponent createComponent() {
-		
-		if (ASICommon.isDEV())
+
+		if (ASICommon.isDEV()) {
 			ASICommon.info("!!! Launched in DEVELOPMENT mode !!!");
+		}
 		String root_path = ASICommon.getRootPathEnv();
 		if (root_path != null) {
 			ASICommon.info("!!! accsyn root path set to: " + root_path + " !!!");
@@ -237,8 +227,9 @@ public class ASIAuthScreen extends AbstractInstallerScreen implements ActionList
 						ic.goForward(1, true, true);
 					}
 				});
-			} else
+			} else {
 				ic.finish(-1);
+			}
 		}
 		super.activated();
 	}
@@ -333,8 +324,9 @@ public class ASIAuthScreen extends AbstractInstallerScreen implements ActionList
 					return true;
 				} else if (!s.toLowerCase().matches("^[0-9a-f]{24}$")) {
 					System.err.println(MESSAGE_01);
-				} else
+				} else {
 					client_id = s;
+				}
 			}
 			// Check with registry
 			JSONObject data = new JSONObject();

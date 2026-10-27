@@ -15,11 +15,15 @@ public class ASIReadDaemonStatusAction extends AbstractInstallOrUninstallAction 
 		String daemon_user = ASICommon.detectDaemonUser();
 		ASICommon.info("Current daemon user(accsyn_daemon_user): "+daemon_user);
 		context.setVariable("accsyn_daemon_user", daemon_user != null ? daemon_user : "");
-		
+
 		String daemon_umask = ASICommon.detectDaemonUmask();
 		ASICommon.info("Current daemon umask(accsyn_daemon_umask): "+daemon_umask);
 		context.setVariable("accsyn_daemon_umask", daemon_umask != null ? daemon_umask : "");
-		
+
+		String daemon_env = ASICommon.detectDaemonEnv();
+		ASICommon.info("Current daemon env(accsyn_daemon_env): "+daemon_env);
+		context.setVariable("accsyn_daemon_env", daemon_env != null ? daemon_env : "");
+
 		String conf_dir = ASICommon.getConfDir();
 		ASICommon.info("Conf dir(accsyn_conf_dir): "+conf_dir);
 		context.setVariable("accsyn_conf_dir", conf_dir);
@@ -31,7 +35,7 @@ public class ASIReadDaemonStatusAction extends AbstractInstallOrUninstallAction 
 		String log_dir = ASICommon.getLogDir();
 		ASICommon.info("Conf dir(accsyn_log_dir): "+log_dir);
 		context.setVariable("accsyn_log_dir", log_dir);
-		
+
 		String temp_dir = ASICommon.getTempDir();
 		ASICommon.info("Temp dir(accsyn_temp_dir): "+temp_dir);
 		context.setVariable("accsyn_temp_dir", temp_dir);
